@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStocks - Categories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'craft-teal': '#1DB584',
+                        'craft-teal-light': '#20D394',
+                        'craft-teal-dark': '#1A9D75',
+                        'craft-gray': '#F8F9FA',
+                        'craft-gray-dark': '#343A40',
+                        'prompt-purple': '#8B5CF6',
+                        'prompt-blue': '#3B82F6',
+                        'prompt-pink': '#EC4899',
+                        'prompt-orange': '#F59E0B',
+                        'craft-black': '#212529',
+                        'glass': 'rgba(255, 255, 255, 0.85)',
+                        'glass-dark': 'rgba(0, 0, 0, 0.05)'
+                    },
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        'mono': ['SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'monospace']
+                    },
+                    borderRadius: {
+                        'xl': '1rem',
+                        '2xl': '1.25rem',
+                        '3xl': '1.5rem',
+                        '4xl': '2rem'
+                    },
+                    animation: {
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'slide-in': 'slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'scale-in': 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'bounce-soft': 'bounceSoft 1s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        slideUp: {
+                            'from': { transform: 'translateY(20px)', opacity: '0' },
+                            'to': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideIn: {
+                            'from': { transform: 'translateX(-20px)', opacity: '0' },
+                            'to': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' }
+                        },
+                        scaleIn: {
+                            'from': { transform: 'scale(0.95)', opacity: '0' },
+                            'to': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(29, 181, 132, 0.3)' },
+                            '50%': { boxShadow: '0 0 30px rgba(29, 181, 132, 0.6)' }
+                        },
+                        bounceSoft: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' }
+                        }
+                    },
+                    boxShadow: {
+                        'craft': '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                        'craft-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'craft-xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                        'teal-glow': '0 0 30px rgba(29, 181, 132, 0.3)',
+                        'inner-light': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-teal {
+            background: linear-gradient(135deg, #1DB584 0%, #20D394 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #1DB584 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .category-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .category-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .category-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .usage-bar {
+            background: linear-gradient(90deg, transparent 0%, rgba(29, 181, 132, 0.1) 50%, transparent 100%);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -100% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-craft-gray font-sf min-h-screen">
+    <!-- Main Container -->
+    <div class="max-w-sm mx-auto bg-white min-h-screen relative overflow-hidden">
+        
+        <!-- Status Bar -->
+        <div class="flex items-center justify-between px-6 pt-3 pb-1 text-craft-black">
+            <div class="font-medium text-lg">9:41</div>
+            <div class="flex items-center space-x-1">
+                <div class="flex space-x-1">
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-gray-300 rounded-full"></div>
+                </div>
+                <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                </svg>
+                <div class="w-6 h-3 border border-craft-black rounded-sm">
+                    <div class="w-4 h-2 bg-craft-teal rounded-sm m-0.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="px-6 py-4 animate-slide-in">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button class="w-10 h-10 glass-morphism rounded-xl flex items-center justify-center hover-lift">
+                        <svg class="w-5 h-5 text-craft-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-xl font-bold text-craft-black">Categories</h1>
+                        <p class="text-sm text-gray-500">Organize your prompts</p>
+                    </div>
+                </div>
+                <button id="add-category-btn" class="gradient-teal text-white px-4 py-2 rounded-xl text-sm font-medium shadow-teal-glow hover:scale-105 transition-transform duration-200 animate-pulse-glow">
+                    Add
+                </button>
+            </div>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="px-6 mb-6 animate-fade-in" style="animation-delay: 0.2s;">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input 
+                    type="text" 
+                    placeholder="Search categories..."
+                    class="w-full pl-12 pr-4 py-3 glass-morphism rounded-2xl text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal focus:border-transparent shadow-craft transition-all duration-300"
+                >
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="px-6 mb-6 animate-slide-up" style="animation-delay: 0.3s;">
+            <div class="glass-card rounded-3xl p-6 shadow-craft-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-craft-black">Overview</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-craft-teal rounded-full animate-pulse"></div>
+                        <span class="text-xs text-craft-teal font-medium">LIVE</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-craft-teal">8</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Categories</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-prompt-purple">247</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Prompts</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-prompt-orange">2.4MB</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Storage</div>
+                    </div>
+                </div>
+                <div class="mt-4 bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div class="bg-gradient-to-r from-craft-teal to-craft-teal-light h-2 rounded-full transition-all duration-1000 ease-out" style="width: 76%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>2.4MB used</span>
+                    <span>1.6MB remaining</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Cards -->
+        <div class="px-6 space-y-4 pb-32">
+            
+            <!-- Productivity Category -->
+            <div class="category-card rounded-3xl p-6 shadow-craft-lg hover-lift animate-scale-in" style="animation-delay: 0.4s;">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-craft-teal/10 rounded-2xl flex items-center justify-center category-icon">
+                            <span class="text-2xl">🎯</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-craft-black text-lg">Productivity</h3>
+                            <p class="text-sm text-gray-500">Task management & efficiency</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 glass-morphism rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors">
+                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="text-center bg-craft-teal/5 rounded-xl p-3">
+                        <div class="text-lg font-bold text-craft-teal">47</div>
+                        <div class="text-xs text-gray-500">Prompts</div>
+                    </div>
+                    <div class="text-center bg-green-50 rounded-xl p-3">
+                        <div class="text-lg font-bold text-green-600">892KB</div>
+                        <div class="text-xs text-gray-500">Size</div>
+                    </div>
+                    <div class="text-center bg-blue-50 rounded-xl p-3">
+                        <div class="text-lg font-bold text-blue-600">94%</div>
+                        <div class="text-xs text-gray-500">Usage</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 rounded-full h-2 mb-3 overflow-hidden">
+                    <div class="bg-gradient-to-r from-craft-teal to-green-400 h-2 rounded-full usage-bar" style="width: 94%"></div>
+                </div>
+                
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                    <span>Created: Jan 10, 2024</span>
+                    <div class="flex space-x-3">
+                        <button class="text-craft-teal hover:text-craft-teal-dark font-medium">Edit</button>
+                        <button class="text-red-500 hover:text-red-600 font-medium">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Writing Category -->
+            <div class="category-card rounded-3xl p-6 shadow-craft-lg hover-lift animate-scale-in" style="animation-delay: 0.5s;">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-prompt-blue/10 rounded-2xl flex items-center justify-center category-icon">
+                            <span class="text-2xl">✍️</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-craft-black text-lg">Writing</h3>
+                            <p class="text-sm text-gray-500">Content creation & editing</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 glass-morphism rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors">
+                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="text-center bg-prompt-blue/5 rounded-xl p-3">
+                        <div class="text-lg font-bold text-prompt-blue">32</div>
+                        <div class="text-xs text-gray-500">Prompts</div>
+                    </div>
+                    <div class="text-center bg-green-50 rounded-xl p-3">
+                        <div class="text-lg font-bold text-green-600">654KB</div>
+                        <div class="text-xs text-gray-500">Size</div>
+                    </div>
+                    <div class="text-center bg-blue-50 rounded-xl p-3">
+                        <div class="text-lg font-bold text-blue-600">78%</div>
+                        <div class="text-xs text-gray-500">Usage</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 rounded-full h-2 mb-3 overflow-hidden">
+                    <div class="bg-gradient-to-r from-prompt-blue to-purple-400 h-2 rounded-full usage-bar" style="width: 78%"></div>
+                </div>
+                
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                    <span>Created: Jan 08, 2024</span>
+                    <div class="flex space-x-3">
+                        <button class="text-craft-teal hover:text-craft-teal-dark font-medium">Edit</button>
+                        <button class="text-red-500 hover:text-red-600 font-medium">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Category -->
+            <div class="category-card rounded-3xl p-6 shadow-craft-lg hover-lift animate-scale-in" style="animation-delay: 0.6s;">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-prompt-purple/10 rounded-2xl flex items-center justify-center category-icon">
+                            <span class="text-2xl">📊</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-craft-black text-lg">Analysis</h3>
+                            <p class="text-sm text-gray-500">Data insights & research</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 glass-morphism rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors">
+                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="text-center bg-prompt-purple/5 rounded-xl p-3">
+                        <div class="text-lg font-bold text-prompt-purple">28</div>
+                        <div class="text-xs text-gray-500">Prompts</div>
+                    </div>
+                    <div class="text-center bg-green-50 rounded-xl p-3">
+                        <div class="text-lg font-bold text-green-600">543KB</div>
+                        <div class="text-xs text-gray-500">Size</div>
+                    </div>
+                    <div class="text-center bg-blue-50 rounded-xl p-3">
+                        <div class="text-lg font-bold text-blue-600">65%</div>
+                        <div class="text-xs text-gray-500">Usage</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 rounded-full h-2 mb-3 overflow-hidden">
+                    <div class="bg-gradient-to-r from-prompt-purple to-pink-400 h-2 rounded-full usage-bar" style="width: 65%"></div>
+                </div>
+                
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                    <span>Created: Jan 12, 2024</span>
+                    <div class="flex space-x-3">
+                        <button class="text-craft-teal hover:text-craft-teal-dark font-medium">Edit</button>
+                        <button class="text-red-500 hover:text-red-600 font-medium">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty Category Template -->
+            <div class="category-card rounded-3xl p-6 shadow-craft border-2 border-dashed border-gray-300 animate-scale-in" style="animation-delay: 0.7s;">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                        <span class="text-3xl opacity-50">📁</span>
+                    </div>
+                    <h3 class="font-bold text-gray-600 text-lg mb-2">Other</h3>
+                    <p class="text-sm text-gray-400 mb-4">Uncategorized prompts</p>
+                    
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="text-center bg-gray-50 rounded-xl p-3">
+                            <div class="text-lg font-bold text-gray-400">0</div>
+                            <div class="text-xs text-gray-400">Prompts</div>
+                        </div>
+                        <div class="text-center bg-gray-50 rounded-xl p-3">
+                            <div class="text-lg font-bold text-gray-400">0B</div>
+                            <div class="text-xs text-gray-400">Size</div>
+                        </div>
+                        <div class="text-center bg-gray-50 rounded-xl p-3">
+                            <div class="text-lg font-bold text-gray-400">0%</div>
+                            <div class="text-xs text-gray-400">Usage</div>
+                        </div>
+                    </div>
+                    
+                    <button class="text-craft-teal hover:text-craft-teal-dark font-medium text-sm">
+                        Add your first prompt
+                    </button>
+                </div>
+            </div>
+
+            <!-- Storage Warning -->
+            <div class="glass-card rounded-3xl p-4 shadow-craft border-l-4 border-yellow-400 bg-yellow-50/80 animate-fade-in" style="animation-delay: 0.8s;">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-yellow-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-4 h-4 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm text-yellow-800">
+                            <strong>Productivity</strong> category is approaching storage limit.
+                        </p>
+                        <button class="text-xs text-yellow-700 hover:text-yellow-900 font-medium underline mt-1">
+                            View cleanup suggestions →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <div class="fixed bottom-24 right-6 z-50 animate-scale-in" style="animation-delay: 1s;">
+            <button id="fab-add" class="w-14 h-14 gradient-teal rounded-2xl shadow-teal-glow flex items-center justify-center hover:scale-110 transform transition-all duration-300 animate-pulse-glow">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm z-40">
+            <div class="glass-morphism mx-4 mb-4 rounded-3xl shadow-craft-xl border border-white/30">
+                <div class="flex justify-around py-4">
+                    <button class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-gray-600">Home</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl bg-craft-teal/10 border border-craft-teal/30">
+                        <div class="w-8 h-8 gradient-teal rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-craft-teal">Categories</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-gray-600">Analytics</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-gray-600">Settings</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div id="add-category-modal" class="fixed inset-0 bg-black/50 modal-backdrop z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-3xl shadow-craft-xl w-full max-w-sm animate-scale-in">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-craft-black">New Category</h3>
+                    <button id="close-modal" class="w-8 h-8 glass-morphism rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-craft-black mb-2">
+                            Category Name <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            required 
+                            class="w-full p-4 glass-morphism rounded-2xl text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal transition-all duration-300" 
+                            placeholder="Enter category name"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-craft-black mb-2">Description</label>
+                        <textarea 
+                            rows="3" 
+                            class="w-full p-4 glass-morphism rounded-2xl text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal resize-none transition-all duration-300" 
+                            placeholder="Optional description"
+                        ></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-craft-black mb-3">Choose Icon</label>
+                        <div class="grid grid-cols-6 gap-3">
+                            <button type="button" class="category-icon-btn w-12 h-12 glass-morphism rounded-xl flex items-center justify-center hover:bg-craft-teal/10 hover:border-craft-teal transition-all duration-300 selected" data-icon="🎯">
+                                <span class="text-xl">🎯</span>
+                            </button>
+                            <button type="button" class="category-icon-btn w-12 h-12 glass-morphism rounded-xl flex items-center justify-center hover:bg-craft-teal/10 hover:border-craft-teal transition-all duration-300" data-icon="✍️">
+                                <span class="text-xl">✍️</span>
+                            </button>
+                            <button type="button" class="category-icon-btn w-12 h-12 glass-morphism rounded-xl flex items-center justify-center hover:bg-craft-teal/10 hover:border-craft-teal transition-all duration-300" data-icon="📊">
+                                <span class="text-xl">📊</span>
+                            </button>
+                            <button type="button" class="category-icon-btn w-12 h-12 glass-morphism rounded-xl flex items-center justify-center hover:bg-craft-teal/10 hover:border-craft-teal transition-all duration-300" data-icon="💬">
+                                <span class="text-xl">💬</span>
+                            </button>
+                            <button type="button" class="category-icon-btn w-12 h-12 glass-morphism rounded-xl flex items-center justify-center hover:bg-craft-teal/10 hover:border-craft-teal transition-all duration-300" data-icon="🎨">
+                                <span class="text-xl">🎨</span>
+                            </button>
+                            <button type="button" class="category-icon-btn w-12 h-12 glass-morphism rounded-xl flex items-center justify-center hover:bg-craft-teal/10 hover:border-craft-teal transition-all duration-300" data-icon="⚡">
+                                <span class="text-xl">⚡</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button type="button" id="cancel-btn" class="flex-1 glass-morphism text-craft-black py-4 rounded-2xl text-sm font-medium hover:bg-gray-100 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="flex-1 gradient-teal text-white py-4 rounded-2xl text-sm font-medium shadow-teal-glow hover:scale-105 transition-all duration-300">
+                            Create Category
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCategoryManager();
+        });
+
+        function initializeCategoryManager() {
+            // Modal controls
+            const addBtn = document.getElementById('add-category-btn');
+            const fabBtn = document.getElementById('fab-add');
+            const modal = document.getElementById('add-category-modal');
+            const closeBtn = document.getElementById('close-modal');
+            const cancelBtn = document.getElementById('cancel-btn');
+
+            // Open modal
+            [addBtn, fabBtn].forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            // Close modal
+            [closeBtn, cancelBtn].forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                });
+            });
+
+            // Close on backdrop click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Icon selection
+            const iconButtons = document.querySelectorAll('.category-icon-btn');
+            iconButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    iconButtons.forEach(b => {
+                        b.classList.remove('selected', 'bg-craft-teal/20', 'border-craft-teal');
+                    });
+                    btn.classList.add('selected', 'bg-craft-teal/20', 'border-craft-teal');
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('input[placeholder="Search categories..."]');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const categoryCards = document.querySelectorAll('.category-card');
+                
+                categoryCards.forEach(card => {
+                    const categoryName = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                    const categoryDesc = card.querySelector('p')?.textContent.toLowerCase() || '';
+                    
+                    if (categoryName.includes(searchTerm) || categoryDesc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.3s ease-out';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // Form submission
+            const form = modal.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                
+                // Loading state
+                submitBtn.innerHTML = '<svg class="w-4 h-4 animate-spin mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle></svg>';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    // Success state
+                    submitBtn.textContent = '✅ Created!';
+                    submitBtn.className = 'flex-1 bg-green-500 text-white py-4 rounded-2xl text-sm font-medium shadow-lg';
+                    
+                    setTimeout(() => {
+                        // Close modal and reset form
+                        modal.classList.add('hidden');
+                        document.body.style.overflow = 'auto';
+                        form.reset();
+                        
+                        // Reset button
+                        submitBtn.textContent = originalText;
+                        submitBtn.className = 'flex-1 gradient-teal text-white py-4 rounded-2xl text-sm font-medium shadow-teal-glow hover:scale-105 transition-all duration-300';
+                        submitBtn.disabled = false;
+                        
+                        // Reset icon selection
+                        iconButtons.forEach(b => {
+                            b.classList.remove('selected', 'bg-craft-teal/20', 'border-craft-teal');
+                        });
+                        iconButtons[0].classList.add('selected', 'bg-craft-teal/20', 'border-craft-teal');
+                    }, 1500);
+                }, 1000);
+            });
+
+            // Category action buttons
+            const editButtons = document.querySelectorAll('button:contains("Edit")');
+            const deleteButtons = document.querySelectorAll('button:contains("Delete")');
+
+            // Enhanced interactions
+            setupCategoryInteractions();
+        }
+
+        function setupCategoryInteractions() {
+            // Card hover effects
+            const categoryCards = document.querySelectorAll('.category-card:not([class*="border-dashed"])');
+            categoryCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                    this.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.15)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '';
+                });
+            });
+
+            // Animate usage bars on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target.querySelector('.usage-bar');
+                        if (bar) {
+                            const width = bar.style.width;
+                            bar.style.width = '0%';
+                            setTimeout(() => {
+                                bar.style.width = width;
+                            }, 200);
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            categoryCards.forEach(card => observer.observe(card));
+
+            // Real-time updates simulation
+            setInterval(() => {
+                const liveIndicator = document.querySelector('.animate-pulse');
+                if (liveIndicator) {
+                    liveIndicator.style.opacity = '0.5';
+                    setTimeout(() => {
+                        liveIndicator.style.opacity = '1';
+                    }, 200);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

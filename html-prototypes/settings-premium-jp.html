@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStocks - 設定</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'craft-teal': '#1DB584',
+                        'craft-teal-light': '#20D394',
+                        'craft-teal-dark': '#1A9D75',
+                        'craft-gray': '#F8F9FA',
+                        'craft-gray-dark': '#343A40',
+                        'prompt-purple': '#8B5CF6',
+                        'prompt-blue': '#3B82F6',
+                        'prompt-pink': '#EC4899',
+                        'prompt-orange': '#F59E0B',
+                        'craft-black': '#212529',
+                        'glass': 'rgba(255, 255, 255, 0.85)',
+                        'glass-dark': 'rgba(0, 0, 0, 0.05)'
+                    },
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        'mono': ['SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'monospace']
+                    },
+                    borderRadius: {
+                        'xl': '1rem',
+                        '2xl': '1.25rem',
+                        '3xl': '1.5rem',
+                        '4xl': '2rem'
+                    },
+                    animation: {
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'slide-in': 'slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'scale-in': 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'bounce-soft': 'bounceSoft 1s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        slideUp: {
+                            'from': { transform: 'translateY(20px)', opacity: '0' },
+                            'to': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideIn: {
+                            'from': { transform: 'translateX(-20px)', opacity: '0' },
+                            'to': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' }
+                        },
+                        scaleIn: {
+                            'from': { transform: 'scale(0.95)', opacity: '0' },
+                            'to': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(29, 181, 132, 0.3)' },
+                            '50%': { boxShadow: '0 0 30px rgba(29, 181, 132, 0.6)' }
+                        },
+                        bounceSoft: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' }
+                        }
+                    },
+                    boxShadow: {
+                        'craft': '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                        'craft-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'craft-xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                        'teal-glow': '0 0 30px rgba(29, 181, 132, 0.3)',
+                        'inner-light': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-teal {
+            background: linear-gradient(135deg, #1DB584 0%, #20D394 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #1DB584 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .toggle-switch {
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #1DB584 0%, #20D394 100%);
+        }
+        
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(100%);
+        }
+        
+        .setting-item {
+            transition: all 0.3s ease;
+        }
+        
+        .setting-item:hover {
+            background: rgba(29, 181, 132, 0.02);
+        }
+        
+        .danger-zone {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.02));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .premium-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-craft-gray font-sf min-h-screen">
+    <!-- Main Container -->
+    <div class="max-w-sm mx-auto bg-white min-h-screen relative overflow-hidden">
+        
+        <!-- Status Bar -->
+        <div class="flex items-center justify-between px-6 pt-3 pb-1 text-craft-black">
+            <div class="font-medium text-lg">9:41</div>
+            <div class="flex items-center space-x-1">
+                <div class="flex space-x-1">
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-gray-300 rounded-full"></div>
+                </div>
+                <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                </svg>
+                <div class="w-6 h-3 border border-craft-black rounded-sm">
+                    <div class="w-4 h-2 bg-craft-teal rounded-sm m-0.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="px-6 py-4 animate-slide-in">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button class="w-10 h-10 glass-morphism rounded-xl flex items-center justify-center hover-lift">
+                        <svg class="w-5 h-5 text-craft-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-xl font-bold text-craft-black">設定</h1>
+                        <p class="text-sm text-gray-500">エクスペリエンスをカスタマイズ</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <!-- Settings Sections -->
+        <div class="px-6 space-y-6 pb-32">
+
+            <!-- Data Management -->
+            <section class="animate-slide-up" style="animation-delay: 0.3s;">
+                <h3 class="text-lg font-semibold text-craft-black mb-4">データ管理</h3>
+                
+                <div class="space-y-3">
+                    <button class="w-full setting-item glass-card rounded-2xl p-4 shadow-craft hover-lift text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-green-600 text-lg">💾</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">バックアップ作成</p>
+                                    <p class="text-sm text-gray-500">すべてのデータをエクスポート</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full setting-item glass-card rounded-2xl p-4 shadow-craft hover-lift text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-blue-600 text-lg">📤</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">データ復元</p>
+                                    <p class="text-sm text-gray-500">バックアップからインポート</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full setting-item glass-card rounded-2xl p-4 shadow-craft hover-lift text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-purple-600 text-lg">📋</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">プロンプトエクスポート</p>
+                                    <p class="text-sm text-gray-500">JSONまたはテキスト形式</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Widget Settings -->
+            <section class="animate-slide-up" style="animation-delay: 0.4s;">
+                <h3 class="text-lg font-semibold text-craft-black mb-4">ウィジェット設定</h3>
+                
+                <div class="glass-card rounded-3xl p-6 shadow-craft-lg space-y-6">
+                    <!-- Widget Enable -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-craft-teal/10 rounded-xl flex items-center justify-center">
+                                <span class="text-craft-teal text-lg">📱</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-craft-black">ウィジェット有効化</p>
+                                <p class="text-sm text-gray-500">ホーム画面クイックアクセス</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="toggle-slider w-14 h-8 bg-gray-200 rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all"></div>
+                        </label>
+                    </div>
+
+                    <!-- Widget Size -->
+                    <div>
+                        <label class="block text-sm font-medium text-craft-black mb-3">ウィジェットサイズ</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="widget-size" value="small" class="sr-only peer">
+                                <div class="glass-morphism rounded-xl p-3 text-center border-2 border-transparent peer-checked:border-craft-teal peer-checked:bg-craft-teal/10 transition-all duration-300">
+                                    <div class="w-8 h-8 bg-gray-200 rounded-lg mx-auto mb-2"></div>
+                                    <span class="text-xs font-medium">小</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="widget-size" value="medium" class="sr-only peer" checked>
+                                <div class="glass-morphism rounded-xl p-3 text-center border-2 border-craft-teal bg-craft-teal/10 transition-all duration-300">
+                                    <div class="w-8 h-6 bg-craft-teal/30 rounded-lg mx-auto mb-2"></div>
+                                    <span class="text-xs font-medium text-craft-teal">中</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="widget-size" value="large" class="sr-only peer">
+                                <div class="glass-morphism rounded-xl p-3 text-center border-2 border-transparent peer-checked:border-craft-teal peer-checked:bg-craft-teal/10 transition-all duration-300">
+                                    <div class="w-8 h-8 bg-gray-200 rounded-lg mx-auto mb-2"></div>
+                                    <span class="text-xs font-medium">大</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Widget Refresh -->
+                    <div>
+                        <label class="block text-sm font-medium text-craft-black mb-2">更新頻度</label>
+                        <select class="w-full p-3 glass-morphism rounded-xl text-craft-black focus:outline-none focus:ring-2 focus:ring-craft-teal transition-all duration-300">
+                            <option value="manual">手動のみ</option>
+                            <option value="hourly">1時間ごと</option>
+                            <option value="daily" selected>毎日</option>
+                        </select>
+                    </div>
+
+                    <!-- Show Favorites -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-craft-black">お気に入りのみ</p>
+                            <p class="text-sm text-gray-500">スター付きプロンプトのみ表示</p>
+                        </div>
+                        <label class="toggle-switch relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="toggle-slider w-14 h-8 bg-gray-200 rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all"></div>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- App Preferences -->
+            <section class="animate-slide-up" style="animation-delay: 0.6s;">
+                <h3 class="text-lg font-semibold text-craft-black mb-4">アプリ設定</h3>
+                
+                <div class="glass-card rounded-3xl p-6 shadow-craft-lg space-y-6">
+
+                    <!-- Auto Backup -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <span class="text-blue-600 text-lg">⚡</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-craft-black">自動バックアップ</p>
+                                <p class="text-sm text-gray-500">毎日の自動バックアップ</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="toggle-slider w-14 h-8 bg-gray-200 rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all"></div>
+                        </label>
+                    </div>
+
+                    <!-- Language -->
+                    <button class="w-full setting-item rounded-2xl p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-purple-600 text-lg">🌐</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">言語</p>
+                                    <p class="text-sm text-gray-500">日本語 (Japanese)</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Support & Information -->
+            <section class="animate-slide-up" style="animation-delay: 0.7s;">
+                <h3 class="text-lg font-semibold text-craft-black mb-4">サポート・情報</h3>
+                
+                <div class="space-y-3">
+                    <button class="w-full setting-item glass-card rounded-2xl p-4 shadow-craft hover-lift text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-blue-600 text-lg">❓</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">ヘルプ・FAQ</p>
+                                    <p class="text-sm text-gray-500">ヘルプとサポートを受ける</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full setting-item glass-card rounded-2xl p-4 shadow-craft hover-lift text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-green-600 text-lg">💬</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">フィードバック送信</p>
+                                    <p class="text-sm text-gray-500">アプリ改善にご協力ください</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full setting-item glass-card rounded-2xl p-4 shadow-craft hover-lift text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-gray-600 text-lg">📄</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">プライバシーポリシー</p>
+                                    <p class="text-sm text-gray-500">データ取り扱い情報</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full setting-item glass-card rounded-2xl p-4 shadow-craft hover-lift text-left">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-gray-600 text-lg">ℹ️</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-craft-black">このアプリについて</p>
+                                    <p class="text-sm text-gray-500">バージョン 1.0.0</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Danger Zone -->
+            <section class="animate-slide-up" style="animation-delay: 0.8s;">
+                <h3 class="text-lg font-semibold text-red-600 mb-4">危険領域</h3>
+                
+                <div class="danger-zone rounded-3xl p-6 shadow-craft-lg">
+                    <button id="delete-all-btn" class="w-full setting-item rounded-2xl p-4 text-left hover:bg-red-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-red-600 text-lg">🗑️</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-red-600">すべてのデータを削除</p>
+                                    <p class="text-sm text-red-500">すべてのプロンプトと設定を削除</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm z-40">
+            <div class="glass-morphism mx-4 mb-4 rounded-3xl shadow-craft-xl border border-white/30">
+                <div class="flex justify-around py-4 relative">
+                    <button class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-gray-600">ホーム</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-gray-600">カテゴリ</span>
+                    </button>
+                    
+                    <!-- Center Plus Button -->
+                    <button class="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 w-10 h-10 gradient-teal rounded-xl shadow-teal-glow flex items-center justify-center hover:scale-110 transition-all duration-300 animate-pulse-glow">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </button>
+                    
+                    <button id="edit-btn-settings" class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-gray-600">編集</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center space-y-1 px-4 py-2 rounded-2xl bg-craft-teal/10 border border-craft-teal/30">
+                        <div class="w-8 h-8 gradient-teal rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-medium text-craft-teal">設定</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSettings();
+        });
+
+        function initializeSettings() {
+            // Toggle switch functionality
+            const toggles = document.querySelectorAll('.toggle-switch input');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const slider = this.nextElementSibling;
+                    if (this.checked) {
+                        slider.style.background = 'linear-gradient(135deg, #1DB584 0%, #20D394 100%)';
+                    } else {
+                        slider.style.background = '#e5e7eb';
+                    }
+                    
+                    // Add ripple effect
+                    createRippleEffect(slider);
+                });
+            });
+
+            // Radio button interactions
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Handle widget size selection visual feedback
+                    if (this.name === 'widget-size') {
+                        const allLabels = document.querySelectorAll(`input[name="${this.name}"]`);
+                        allLabels.forEach(r => {
+                            const label = r.parentElement.querySelector('div');
+                            label.classList.remove('border-craft-teal', 'bg-craft-teal/10');
+                            label.querySelector('span').classList.remove('text-craft-teal');
+                        });
+                        
+                        const selectedLabel = this.parentElement.querySelector('div');
+                        selectedLabel.classList.add('border-craft-teal', 'bg-craft-teal/10');
+                        selectedLabel.querySelector('span').classList.add('text-craft-teal');
+                    }
+                });
+            });
+
+            // Setting item interactions
+            const settingItems = document.querySelectorAll('.setting-item');
+            settingItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Add click feedback
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+
+            // Delete all data confirmation
+            const deleteBtn = document.getElementById('delete-all-btn');
+            deleteBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (confirm('すべてのデータを削除してもよろしいですか？この操作は元に戻すことができません。')) {
+                    const originalContent = this.innerHTML;
+                    
+                    // Show loading state
+                    this.innerHTML = `
+                        <div class="flex items-center justify-center">
+                            <svg class="w-5 h-5 animate-spin text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+                            </svg>
+                            <span class="ml-2 text-red-600">削除中...</span>
+                        </div>
+                    `;
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.innerHTML = `
+                            <div class="flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="ml-2 text-green-600">削除完了</span>
+                            </div>
+                        `;
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalContent;
+                            this.disabled = false;
+                        }, 2000);
+                    }, 2000);
+                }
+            });
+
+            // Edit button navigation
+            const editBtnSettings = document.getElementById('edit-btn-settings');
+            if (editBtnSettings) {
+                editBtnSettings.addEventListener('click', function() {
+                    // Add loading animation
+                    const icon = this.querySelector('svg');
+                    const originalIcon = icon.innerHTML;
+                    icon.innerHTML = '<circle cx="12" cy="12" r="10" stroke-width="2" stroke="currentColor" fill="none" class="animate-spin"></circle>';
+                    
+                    // Navigate to edit page after short delay
+                    setTimeout(() => {
+                        window.location.href = 'edit-prompt-premium-jp.html';
+                    }, 300);
+                });
+            }
+
+            // Enhanced hover effects
+            setupEnhancedInteractions();
+        }
+
+        function setupEnhancedInteractions() {
+            // Storage usage animation
+            const storageBar = document.querySelector('.bg-gradient-to-r.from-craft-teal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const width = storageBar.style.width;
+                        storageBar.style.width = '0%';
+                        setTimeout(() => {
+                            storageBar.style.width = width;
+                        }, 200);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            if (storageBar) {
+                observer.observe(storageBar.parentElement);
+            }
+
+            // Profile card parallax effect
+            const profileCard = document.querySelector('.premium-gradient');
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.1;
+                profileCard.style.transform = `translateY(${rate}px)`;
+            });
+
+            // Section animation observer
+            const sections = document.querySelectorAll('section');
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'all 0.6s ease';
+                sectionObserver.observe(section);
+            });
+        }
+
+        function createRippleEffect(element) {
+            const ripple = document.createElement('div');
+            ripple.className = 'absolute inset-0 bg-white/30 rounded-full scale-0 opacity-100 pointer-events-none';
+            ripple.style.animation = 'ping 0.6s cubic-bezier(0, 0, 0.2, 1)';
+            
+            element.style.position = 'relative';
+            element.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStocks - AI Prompt Library</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-blue': '#00D4FF',
+                        'electric-purple': '#8B5CF6',
+                        'cyber-green': '#10B981',
+                        'dark-slate': '#0F172A',
+                        'space-gray': '#1E293B',
+                        'glass-white': 'rgba(255, 255, 255, 0.1)',
+                        'neo-pink': '#EC4899'
+                    },
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                        'sans': ['Inter', 'SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slide-up 0.5s ease-out',
+                        'fade-in': 'fade-in 0.3s ease-out',
+                        'pulse-soft': 'pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        glow: {
+                            'from': { 'box-shadow': '0 0 20px rgba(0, 212, 255, 0.3)' },
+                            'to': { 'box-shadow': '0 0 30px rgba(0, 212, 255, 0.6)' }
+                        },
+                        'slide-up': {
+                            'from': { transform: 'translateY(20px)', opacity: '0' },
+                            'to': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        'fade-in': {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' }
+                        },
+                        'pulse-soft': {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #00D4FF 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .neural-bg {
+            background: radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-dark-slate min-h-screen text-white font-sans cyber-grid neural-bg">
+    <div class="max-w-md mx-auto min-h-screen relative overflow-hidden">
+        <!-- Floating Orbs Background -->
+        <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-electric-purple/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-3/4 right-1/4 w-24 h-24 bg-neon-blue/20 rounded-full blur-2xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute top-1/2 left-1/2 w-20 h-20 bg-cyber-green/20 rounded-full blur-xl animate-float" style="animation-delay: -4s;"></div>
+
+        <!-- Header -->
+        <header class="glass-morphism backdrop-blur-xl px-6 py-4 sticky top-0 z-50 border-b border-white/10">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-neon-blue to-electric-purple rounded-lg flex items-center justify-center animate-glow">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-bold gradient-text">PromptStocks</h1>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="p-2 glass-morphism rounded-xl hover:bg-white/20 transition-all duration-300 group">
+                        <svg class="w-5 h-5 group-hover:text-neon-blue transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                    <button class="p-2 glass-morphism rounded-xl hover:bg-white/20 transition-all duration-300 group">
+                        <svg class="w-5 h-5 group-hover:text-electric-purple transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Category Filter Tabs -->
+        <div class="glass-morphism backdrop-blur-xl px-6 py-4 sticky top-[88px] z-40 border-b border-white/10">
+            <div class="flex overflow-x-auto space-x-3 scrollbar-hide">
+                <button class="bg-gradient-to-r from-neon-blue to-electric-purple text-white px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap shadow-lg animate-glow">All</button>
+                <button class="glass-morphism hover:bg-white/20 text-gray-300 hover:text-white px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 border border-white/20">Productivity</button>
+                <button class="glass-morphism hover:bg-white/20 text-gray-300 hover:text-white px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 border border-white/20">Writing</button>
+                <button class="glass-morphism hover:bg-white/20 text-gray-300 hover:text-white px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 border border-white/20">Analysis</button>
+                <button class="glass-morphism hover:bg-white/20 text-gray-300 hover:text-white px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 border border-white/20">Custom</button>
+            </div>
+        </div>
+
+        <!-- Storage Usage Card -->
+        <div class="mx-6 mt-4 relative">
+            <div class="glass-morphism p-4 rounded-2xl border border-white/20 hover:border-white/30 transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-cyber-green/20 to-neon-blue/20 rounded-xl flex items-center justify-center">
+                            <svg class="h-5 w-5 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-white">Neural Storage</p>
+                            <p class="text-xs text-gray-400">1.2GB / 5.0GB available</p>
+                        </div>
+                    </div>
+                    <span class="text-cyber-green font-bold text-lg font-mono">24%</span>
+                </div>
+                <div class="w-full bg-space-gray/50 rounded-full h-2 overflow-hidden">
+                    <div class="bg-gradient-to-r from-cyber-green to-neon-blue h-2 rounded-full transition-all duration-1000 ease-out" style="width: 24%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt Grid -->
+        <div class="px-6 py-6 space-y-4">
+            <!-- Prompt Card 1 - Neural Enhanced -->
+            <div class="glass-morphism rounded-2xl border border-white/20 hover:border-neon-blue/50 transition-all duration-300 group animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-gradient-to-r from-neon-blue to-electric-purple rounded-full animate-pulse-soft"></div>
+                            <span class="text-xs font-mono text-neon-blue bg-neon-blue/10 px-3 py-1 rounded-full border border-neon-blue/30">SYSTEM</span>
+                            <span class="text-xs font-mono text-electric-purple bg-electric-purple/10 px-3 py-1 rounded-full border border-electric-purple/30">PRODUCTIVITY</span>
+                        </div>
+                        <button class="text-gray-400 hover:text-yellow-400 transition-colors duration-300 group">
+                            <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-white mb-3 text-lg group-hover:text-neon-blue transition-colors duration-300">Task Analysis Neural Engine</h3>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed line-clamp-2">Advanced AI system for analyzing complex tasks and generating optimal execution plans with real-time optimization...</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4 text-xs font-mono text-gray-400">
+                            <span class="flex items-center space-x-1">
+                                <div class="w-1 h-1 bg-cyber-green rounded-full"></div>
+                                <span>2024.01.15</span>
+                            </span>
+                            <span>2.1KB</span>
+                            <span class="text-cyber-green">↑ 247 uses</span>
+                        </div>
+                        <button class="bg-gradient-to-r from-neon-blue to-electric-purple text-white px-4 py-2 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-neon-blue/25 transition-all duration-300 group">
+                            <span class="group-hover:hidden">Copy</span>
+                            <span class="hidden group-hover:inline">⚡ Execute</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prompt Card 2 - Creative Flow -->
+            <div class="glass-morphism rounded-2xl border border-white/20 hover:border-cyber-green/50 transition-all duration-300 group animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-gradient-to-r from-cyber-green to-neon-blue rounded-full animate-pulse-soft"></div>
+                            <span class="text-xs font-mono text-cyber-green bg-cyber-green/10 px-3 py-1 rounded-full border border-cyber-green/30">USER</span>
+                            <span class="text-xs font-mono text-neo-pink bg-neo-pink/10 px-3 py-1 rounded-full border border-neo-pink/30">CREATIVE</span>
+                        </div>
+                        <button class="text-gray-400 hover:text-yellow-400 transition-colors duration-300">
+                            <svg class="w-5 h-5 hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-white mb-3 text-lg group-hover:text-cyber-green transition-colors duration-300">Content Creation Matrix</h3>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed line-clamp-2">Next-generation content generation with SEO optimization, viral potential analysis, and audience engagement algorithms...</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4 text-xs font-mono text-gray-400">
+                            <span class="flex items-center space-x-1">
+                                <div class="w-1 h-1 bg-neo-pink rounded-full"></div>
+                                <span>2024.01.14</span>
+                            </span>
+                            <span>3.7KB</span>
+                            <span class="text-neo-pink">↑ 189 uses</span>
+                        </div>
+                        <button class="bg-gradient-to-r from-cyber-green to-neo-pink text-white px-4 py-2 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-cyber-green/25 transition-all duration-300 group">
+                            <span class="group-hover:hidden">Copy</span>
+                            <span class="hidden group-hover:inline">✨ Generate</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prompt Card 3 - Data Intelligence -->
+            <div class="glass-morphism rounded-2xl border border-white/20 hover:border-electric-purple/50 transition-all duration-300 group animate-slide-up" style="animation-delay: 0.3s;">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 bg-gradient-to-r from-electric-purple to-neo-pink rounded-full animate-pulse-soft"></div>
+                            <span class="text-xs font-mono text-electric-purple bg-electric-purple/10 px-3 py-1 rounded-full border border-electric-purple/30">CUSTOM</span>
+                            <span class="text-xs font-mono text-neon-blue bg-neon-blue/10 px-3 py-1 rounded-full border border-neon-blue/30">ANALYSIS</span>
+                        </div>
+                        <button class="text-gray-400 hover:text-yellow-400 transition-colors duration-300">
+                            <svg class="w-5 h-5 hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-white mb-3 text-lg group-hover:text-electric-purple transition-colors duration-300">Deep Analytics Engine</h3>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed line-clamp-2">Quantum-enhanced data processing with predictive modeling, trend forecasting, and multi-dimensional insight extraction...</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4 text-xs font-mono text-gray-400">
+                            <span class="flex items-center space-x-1">
+                                <div class="w-1 h-1 bg-electric-purple rounded-full"></div>
+                                <span>2024.01.13</span>
+                            </span>
+                            <span>4.2KB</span>
+                            <span class="text-electric-purple">↑ 98 uses</span>
+                        </div>
+                        <button class="bg-gradient-to-r from-electric-purple to-neo-pink text-white px-4 py-2 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-electric-purple/25 transition-all duration-300 group">
+                            <span class="group-hover:hidden">Copy</span>
+                            <span class="hidden group-hover:inline">🧠 Analyze</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State (hidden by default) -->
+            <div class="text-center py-16 hidden" id="empty-state">
+                <div class="relative mx-auto w-24 h-24 mb-6">
+                    <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/20 to-electric-purple/20 rounded-full blur-xl animate-pulse-soft"></div>
+                    <div class="relative glass-morphism rounded-full p-6 border border-white/20">
+                        <svg class="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Neural Network Empty</h3>
+                <p class="text-gray-400 mb-8">Initialize your first AI prompt to begin the synergy</p>
+                <button class="bg-gradient-to-r from-neon-blue to-electric-purple text-white px-8 py-3 rounded-xl font-medium hover:shadow-lg hover:shadow-neon-blue/25 transition-all duration-300 animate-glow">
+                    🧠 Create Neural Prompt
+                </button>
+            </div>
+        </div>
+
+        <!-- Quantum Floating Action Button -->
+        <div class="fixed bottom-24 right-6 z-50">
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-br from-cyber-green to-neon-blue rounded-full blur-lg opacity-60 animate-pulse-soft"></div>
+                <button class="relative w-16 h-16 bg-gradient-to-br from-cyber-green to-neon-blue rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center group animate-float">
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent"></div>
+                    <svg class="w-7 h-7 text-white group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Neural Navigation Dock -->
+        <nav class="fixed bottom-0 left-0 right-0 z-40">
+            <div class="max-w-md mx-auto">
+                <div class="glass-morphism backdrop-blur-xl mx-4 mb-4 rounded-2xl border border-white/20 shadow-2xl">
+                    <div class="flex justify-around py-3">
+                        <button class="flex flex-col items-center py-3 px-4 text-neon-blue group">
+                            <div class="relative">
+                                <div class="absolute inset-0 bg-neon-blue/20 rounded-xl blur-sm group-hover:blur-md transition-all duration-300"></div>
+                                <div class="relative p-2 bg-neon-blue/10 rounded-xl border border-neon-blue/30">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <span class="text-xs font-mono mt-1">Neural</span>
+                        </button>
+                        <button class="flex flex-col items-center py-3 px-4 text-gray-400 hover:text-cyber-green group transition-colors duration-300">
+                            <div class="p-2 glass-morphism rounded-xl border border-white/10 group-hover:border-cyber-green/30 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono mt-1">Tags</span>
+                        </button>
+                        <button class="flex flex-col items-center py-3 px-4 text-gray-400 hover:text-electric-purple group transition-colors duration-300">
+                            <div class="p-2 glass-morphism rounded-xl border border-white/10 group-hover:border-electric-purple/30 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono mt-1">Stats</span>
+                        </button>
+                        <button class="flex flex-col items-center py-3 px-4 text-gray-400 hover:text-neo-pink group transition-colors duration-300">
+                            <div class="p-2 glass-morphism rounded-xl border border-white/10 group-hover:border-neo-pink/30 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono mt-1">Config</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Bottom padding for navigation -->
+        <div class="h-32"></div>
+    </div>
+
+    <script>
+        // Neural Interface Interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize neural animations
+            initializeNeuralEffects();
+            
+            // Category filter functionality with neural transitions
+            const categoryButtons = document.querySelectorAll('[class*="glass-morphism"]');
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.closest('.sticky')) {
+                        // Remove active state from all category buttons
+                        const categoryTabs = this.parentElement.querySelectorAll('button');
+                        categoryTabs.forEach(btn => {
+                            btn.classList.remove('bg-gradient-to-r', 'from-neon-blue', 'to-electric-purple', 'animate-glow');
+                            btn.classList.add('glass-morphism', 'text-gray-300', 'border', 'border-white/20');
+                        });
+                        
+                        // Activate clicked button with neural glow
+                        this.classList.remove('glass-morphism', 'text-gray-300', 'border', 'border-white/20');
+                        this.classList.add('bg-gradient-to-r', 'from-neon-blue', 'to-electric-purple', 'animate-glow');
+                        
+                        // Neural pulse effect
+                        this.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            this.style.transform = 'scale(1)';
+                        }, 150);
+                    }
+                });
+            });
+
+            // Enhanced copy button functionality with neural feedback
+            const copyButtons = document.querySelectorAll('button[class*="bg-gradient-to-r"]');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.textContent.includes('Copy') || this.textContent.includes('Execute') || this.textContent.includes('Generate') || this.textContent.includes('Analyze')) {
+                        const originalHTML = this.innerHTML;
+                        
+                        // Neural success animation
+                        this.innerHTML = '<span class="flex items-center space-x-2"><svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle><path d="m9 12 2 2 4-4"></path></svg><span>Synced</span></span>';
+                        this.classList.add('from-cyber-green', 'to-neon-blue');
+                        
+                        // Create neural ripple effect
+                        const ripple = document.createElement('div');
+                        ripple.className = 'absolute inset-0 bg-white/20 rounded-xl animate-ping';
+                        this.style.position = 'relative';
+                        this.appendChild(ripple);
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalHTML;
+                            this.classList.remove('from-cyber-green', 'to-neon-blue');
+                            if (ripple.parentNode) ripple.remove();
+                        }, 2000);
+                    }
+                });
+            });
+
+            // Enhanced star favorite functionality with quantum glow
+            const starButtons = document.querySelectorAll('svg[viewBox="0 0 20 20"] path[d*="M9.049"]');
+            starButtons.forEach(button => {
+                button.parentElement.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const isActive = this.classList.contains('text-yellow-400');
+                    
+                    if (!isActive) {
+                        this.classList.remove('text-gray-400');
+                        this.classList.add('text-yellow-400');
+                        
+                        // Create quantum star burst effect
+                        for (let i = 0; i < 6; i++) {
+                            const particle = document.createElement('div');
+                            particle.className = 'absolute w-1 h-1 bg-yellow-400 rounded-full pointer-events-none';
+                            particle.style.left = '50%';
+                            particle.style.top = '50%';
+                            particle.style.transform = `translate(-50%, -50%) rotate(${i * 60}deg) translateY(-20px)`;
+                            particle.style.opacity = '0';
+                            particle.style.animation = 'fade-in 0.3s ease-out forwards';
+                            
+                            this.style.position = 'relative';
+                            this.appendChild(particle);
+                            
+                            setTimeout(() => particle.remove(), 300);
+                        }
+                    } else {
+                        this.classList.remove('text-yellow-400');
+                        this.classList.add('text-gray-400');
+                    }
+                });
+            });
+
+            // Neural card hover effects
+            const promptCards = document.querySelectorAll('[class*="glass-morphism"]');
+            promptCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    if (this.querySelector('h3')) {
+                        this.style.transform = 'translateY(-4px)';
+                        this.style.boxShadow = '0 20px 60px rgba(0, 212, 255, 0.15)';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (this.querySelector('h3')) {
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+            });
+        });
+
+        function initializeNeuralEffects() {
+            // Create floating neural particles
+            const container = document.querySelector('.max-w-md');
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'absolute w-px h-px bg-neon-blue/50 rounded-full pointer-events-none';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animation = `float ${3 + Math.random() * 4}s ease-in-out infinite`;
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(particle);
+            }
+
+            // Add scrollbar styling
+            const style = document.createElement('style');
+            style.textContent = `
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+                .line-clamp-2 {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    </script>
+</body>
+</html>

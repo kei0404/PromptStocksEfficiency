@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStocks - 設定</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#EF4444',
+                        accent: '#10B981'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="max-w-md mx-auto bg-white min-h-screen">
+        <!-- Header -->
+        <header class="bg-primary text-white px-4 py-3 sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <button class="p-2 hover:bg-blue-600 rounded-full transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <h1 class="text-xl font-bold">設定</h1>
+                <div class="w-10"></div>
+            </div>
+        </header>
+
+        <!-- User Profile Section -->
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 mx-4 mt-4 rounded-lg">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">ユーザー</h2>
+                    <p class="text-blue-100">47個のプロンプト・5つのカテゴリ</p>
+                    <p class="text-blue-100 text-sm">使用開始: 2024年1月</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Sections -->
+        <div class="px-4 py-4 space-y-6">
+            
+            <!-- Storage Management -->
+            <section>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">ストレージ管理</h3>
+                
+                <!-- Storage Usage -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">ストレージ使用量</h4>
+                                <p class="text-sm text-gray-500">1.2MB / 5MB</p>
+                            </div>
+                        </div>
+                        <span class="text-sm text-green-600 font-medium">24%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full" style="width: 24%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-2">
+                        <span>使用中</span>
+                        <span>利用可能</span>
+                    </div>
+                </div>
+
+                <!-- Storage Actions -->
+                <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">ストレージクリーンアップ</p>
+                                    <p class="text-sm text-gray-500">未使用のプロンプトを削除</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">使用状況レポート</p>
+                                    <p class="text-sm text-gray-500">詳細な統計情報を表示</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Data Management -->
+            <section>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">データ管理</h3>
+                
+                <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">バックアップ作成</p>
+                                    <p class="text-sm text-gray-500">すべてのデータをローカル保存</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">データ復元</p>
+                                    <p class="text-sm text-gray-500">バックアップからデータを復元</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">データエクスポート</p>
+                                    <p class="text-sm text-gray-500">JSONまたはテキスト形式で出力</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Widget Settings -->
+            <section>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">ウィジェット設定</h3>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                    <div class="space-y-4">
+                        <!-- Widget Enable/Disable -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">ウィジェットを有効化</p>
+                                <p class="text-sm text-gray-500">ホーム画面にプロンプトウィジェットを表示</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+
+                        <!-- Widget Size -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ウィジェットサイズ</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="small">小 (2x2)</option>
+                                <option value="medium" selected>中 (4x2)</option>
+                                <option value="large">大 (4x4)</option>
+                            </select>
+                        </div>
+
+                        <!-- Widget Refresh Rate -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">更新頻度</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="manual">手動のみ</option>
+                                <option value="hourly">1時間ごと</option>
+                                <option value="daily" selected>1日1回</option>
+                            </select>
+                        </div>
+
+                        <!-- Show Favorites Only -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">お気に入りのみ表示</p>
+                                <p class="text-sm text-gray-500">ウィジェットにお気に入りプロンプトのみ表示</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy & Security -->
+            <section>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">プライバシー・セキュリティ</h3>
+                
+                <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <p class="font-medium text-gray-900">ローカルデータ暗号化</p>
+                                <p class="text-sm text-gray-500">プロンプトデータを暗号化して保存</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 rounded p-2">
+                            <p class="text-xs text-green-700">✓ すべてのデータはデバイス上にローカル保存されます</p>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">プライバシーポリシー</p>
+                                    <p class="text-sm text-gray-500">データの取り扱いについて</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- App Settings -->
+            <section>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">アプリ設定</h3>
+                
+                <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">ダークモード</p>
+                                <p class="text-sm text-gray-500">アプリの外観を暗いテーマに変更</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">自動バックアップ</p>
+                                <p class="text-sm text-gray-500">毎日自動的にデータをバックアップ</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">言語設定</p>
+                                    <p class="text-sm text-gray-500">日本語</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- About & Support -->
+            <section>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">サポート・情報</h3>
+                
+                <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">ヘルプ・FAQ</p>
+                                    <p class="text-sm text-gray-500">よくある質問と使い方</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">フィードバック送信</p>
+                                    <p class="text-sm text-gray-500">アプリの改善にご協力ください</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full p-4 text-left hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">アプリについて</p>
+                                    <p class="text-sm text-gray-500">バージョン 1.0.0</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Danger Zone -->
+            <section>
+                <h3 class="text-lg font-semibold text-red-600 mb-3">危険な操作</h3>
+                
+                <div class="bg-white border border-red-200 rounded-lg divide-y divide-red-200">
+                    <button class="w-full p-4 text-left hover:bg-red-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-red-600">すべてのデータを削除</p>
+                                    <p class="text-sm text-red-500">プロンプト、カテゴリ、設定をすべて削除</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+            <div class="max-w-md mx-auto px-4 py-2">
+                <div class="flex justify-around">
+                    <button class="flex flex-col items-center py-2 px-3 text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="text-xs font-medium">プロンプト</span>
+                    </button>
+                    <button class="flex flex-col items-center py-2 px-3 text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                        <span class="text-xs font-medium">カテゴリ</span>
+                    </button>
+                    <button class="flex flex-col items-center py-2 px-3 text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <span class="text-xs font-medium">統計</span>
+                    </button>
+                    <button class="flex flex-col items-center py-2 px-3 text-primary">
+                        <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-xs font-medium">設定</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Bottom padding for navigation -->
+        <div class="h-20"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle switches functionality
+            const toggleSwitches = document.querySelectorAll('input[type="checkbox"]');
+            toggleSwitches.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    console.log(`Setting ${this.closest('div').querySelector('p').textContent} changed to: ${this.checked}`);
+                });
+            });
+
+            // Storage cleanup simulation
+            const cleanupBtn = document.querySelector('button:has(svg path[d*="M19 7l"])');
+            if (cleanupBtn) {
+                cleanupBtn.addEventListener('click', function() {
+                    console.log('Opening storage cleanup dialog...');
+                    // Here you would show a modal with cleanup options
+                });
+            }
+
+            // Backup creation simulation
+            const backupBtn = document.querySelector('button:has(svg path[d*="M8 7H5"])');
+            if (backupBtn) {
+                backupBtn.addEventListener('click', function() {
+                    console.log('Creating backup...');
+                    // Show progress indicator and create backup
+                });
+            }
+
+            // Data deletion warning
+            const deleteBtn = document.querySelector('.text-red-600 button');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', function() {
+                    const confirmed = confirm('本当にすべてのデータを削除しますか？この操作は取り消せません。');
+                    if (confirmed) {
+                        console.log('User confirmed data deletion');
+                        // Implement data deletion
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

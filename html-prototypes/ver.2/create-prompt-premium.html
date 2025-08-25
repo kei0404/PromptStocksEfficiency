@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStocks - Create Prompt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'craft-teal': '#1DB584',
+                        'craft-teal-light': '#20D394',
+                        'craft-teal-dark': '#1A9D75',
+                        'craft-gray': '#F8F9FA',
+                        'craft-gray-dark': '#343A40',
+                        'prompt-purple': '#8B5CF6',
+                        'prompt-blue': '#3B82F6',
+                        'prompt-pink': '#EC4899',
+                        'prompt-orange': '#F59E0B',
+                        'craft-black': '#212529',
+                        'glass': 'rgba(255, 255, 255, 0.85)',
+                        'glass-dark': 'rgba(0, 0, 0, 0.05)'
+                    },
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        'mono': ['SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'monospace']
+                    },
+                    borderRadius: {
+                        'xl': '1rem',
+                        '2xl': '1.25rem',
+                        '3xl': '1.5rem',
+                        '4xl': '2rem'
+                    },
+                    animation: {
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'slide-in': 'slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'scale-in': 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'bounce-soft': 'bounceSoft 1s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        slideUp: {
+                            'from': { transform: 'translateY(20px)', opacity: '0' },
+                            'to': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideIn: {
+                            'from': { transform: 'translateX(-20px)', opacity: '0' },
+                            'to': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' }
+                        },
+                        scaleIn: {
+                            'from': { transform: 'scale(0.95)', opacity: '0' },
+                            'to': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(29, 181, 132, 0.3)' },
+                            '50%': { boxShadow: '0 0 30px rgba(29, 181, 132, 0.6)' }
+                        },
+                        bounceSoft: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' }
+                        }
+                    },
+                    boxShadow: {
+                        'craft': '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                        'craft-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'craft-xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                        'teal-glow': '0 0 30px rgba(29, 181, 132, 0.3)',
+                        'inner-light': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-teal {
+            background: linear-gradient(135deg, #1DB584 0%, #20D394 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #1DB584 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(29, 181, 132, 0.15);
+        }
+        
+        .mode-toggle {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            backdrop-filter: blur(20px);
+        }
+        
+        .mode-active {
+            background: linear-gradient(135deg, #1DB584 0%, #20D394 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(29, 181, 132, 0.4);
+        }
+        
+        .char-counter {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="bg-craft-gray font-sf min-h-screen">
+    <!-- Main Container -->
+    <div class="max-w-sm mx-auto bg-white min-h-screen relative overflow-hidden">
+        
+        <!-- Status Bar -->
+        <div class="flex items-center justify-between px-6 pt-3 pb-1 text-craft-black">
+            <div class="font-medium text-lg">9:41</div>
+            <div class="flex items-center space-x-1">
+                <div class="flex space-x-1">
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-craft-black rounded-full"></div>
+                    <div class="w-1 h-3 bg-gray-300 rounded-full"></div>
+                </div>
+                <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                </svg>
+                <div class="w-6 h-3 border border-craft-black rounded-sm">
+                    <div class="w-4 h-2 bg-craft-teal rounded-sm m-0.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="px-6 py-4 animate-slide-in">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button class="w-10 h-10 glass-morphism rounded-xl flex items-center justify-center hover-lift">
+                        <svg class="w-5 h-5 text-craft-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-xl font-bold text-craft-black">Create Prompt</h1>
+                        <p class="text-sm text-gray-500">Build your AI assistant</p>
+                    </div>
+                </div>
+                <button class="gradient-teal text-white px-6 py-2 rounded-xl text-sm font-medium shadow-teal-glow hover:scale-105 transition-transform duration-200 animate-pulse-glow">
+                    Save
+                </button>
+            </div>
+        </header>
+
+        <!-- Mode Toggle -->
+        <div class="px-6 mb-6 animate-fade-in" style="animation-delay: 0.2s;">
+            <div class="glass-card rounded-2xl p-1 shadow-craft">
+                <div class="flex">
+                    <button id="template-mode" class="flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 mode-active">
+                        🎯 Template
+                    </button>
+                    <button id="freeform-mode" class="flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 text-gray-600 hover:text-craft-black">
+                        ✍️ Freeform
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="px-6 space-y-6 pb-32">
+            
+            <!-- Template Mode Content -->
+            <div id="template-content" class="animate-scale-in" style="animation-delay: 0.3s;">
+                
+                <!-- Template Selection -->
+                <div class="glass-card rounded-3xl p-6 shadow-craft-lg mb-6">
+                    <h3 class="text-lg font-semibold text-craft-black mb-4">Choose Template</h3>
+                    <select class="w-full p-4 glass-morphism rounded-2xl text-craft-black focus:outline-none focus:ring-2 focus:ring-craft-teal input-focus transition-all duration-300">
+                        <option value="">Select a template...</option>
+                        <option value="task-analysis">🎯 Task Analysis Engine</option>
+                        <option value="blog-writing">✍️ Blog Content Creator</option>
+                        <option value="data-analysis">📊 Data Intelligence Hub</option>
+                        <option value="email-template">📧 Email Assistant</option>
+                        <option value="meeting-notes">📝 Meeting Synthesizer</option>
+                        <option value="custom">🔧 Custom Template</option>
+                    </select>
+                </div>
+
+                <!-- Template Preview -->
+                <div id="template-preview" class="glass-card rounded-3xl p-6 shadow-craft-lg mb-6 hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-lg font-semibold text-craft-black">Template Preview</h4>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-craft-teal rounded-full animate-pulse"></div>
+                            <span class="text-xs text-craft-teal font-medium">ACTIVE</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-2xl p-4 border-l-4 border-craft-teal">
+                        <div id="preview-content" class="text-sm text-gray-700 leading-relaxed font-mono">
+                            <!-- Template content will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Template Fields -->
+                <div id="template-fields" class="space-y-4 hidden">
+                    <!-- Fields will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Freeform Mode Content -->
+            <div id="freeform-content" class="hidden animate-scale-in">
+                <div class="glass-card rounded-3xl p-6 shadow-craft-lg">
+                    <h3 class="text-lg font-semibold text-craft-black mb-4">Free Writing</h3>
+                    <textarea 
+                        rows="12" 
+                        class="w-full p-4 glass-morphism rounded-2xl text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal input-focus resize-none transition-all duration-300"
+                        placeholder="Start writing your prompt...
+
+Example:
+You are an expert AI assistant specializing in creative problem-solving. Your responses should be:
+
+• Clear and actionable
+• Backed by relevant examples  
+• Tailored to the user's context
+• Innovative yet practical
+
+Please help me with the following challenge..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- Common Settings -->
+            <div class="space-y-6 animate-slide-up" style="animation-delay: 0.4s;">
+                
+                <!-- Basic Information -->
+                <div class="glass-card rounded-3xl p-6 shadow-craft-lg">
+                    <h3 class="text-lg font-semibold text-craft-black mb-4">Prompt Details</h3>
+                    
+                    <!-- Title -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-craft-black mb-2">
+                            Title <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            class="w-full p-4 glass-morphism rounded-2xl text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal input-focus transition-all duration-300"
+                            placeholder="My AI Assistant Prompt"
+                        >
+                    </div>
+
+                    <!-- Prompt Type -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-craft-black mb-3">Prompt Type</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="prompt-type" value="system" class="sr-only peer">
+                                <div class="glass-morphism rounded-2xl p-4 text-center border-2 border-transparent peer-checked:border-prompt-blue peer-checked:bg-prompt-blue/10 peer-checked:shadow-lg transition-all duration-300 hover-lift">
+                                    <div class="w-8 h-8 bg-prompt-blue/20 rounded-xl flex items-center justify-center mx-auto mb-2">
+                                        <span class="text-prompt-blue text-lg">🔧</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-craft-black peer-checked:text-prompt-blue">System</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="prompt-type" value="user" class="sr-only peer" checked>
+                                <div class="glass-morphism rounded-2xl p-4 text-center border-2 border-craft-teal bg-craft-teal/10 shadow-lg transition-all duration-300 hover-lift">
+                                    <div class="w-8 h-8 bg-craft-teal/20 rounded-xl flex items-center justify-center mx-auto mb-2">
+                                        <span class="text-craft-teal text-lg">👤</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-craft-teal">User</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="prompt-type" value="assistant" class="sr-only peer">
+                                <div class="glass-morphism rounded-2xl p-4 text-center border-2 border-transparent peer-checked:border-prompt-orange peer-checked:bg-prompt-orange/10 peer-checked:shadow-lg transition-all duration-300 hover-lift">
+                                    <div class="w-8 h-8 bg-prompt-orange/20 rounded-xl flex items-center justify-center mx-auto mb-2">
+                                        <span class="text-prompt-orange text-lg">🤖</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-craft-black peer-checked:text-prompt-orange">Assistant</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="prompt-type" value="custom" class="sr-only peer">
+                                <div class="glass-morphism rounded-2xl p-4 text-center border-2 border-transparent peer-checked:border-prompt-purple peer-checked:bg-prompt-purple/10 peer-checked:shadow-lg transition-all duration-300 hover-lift">
+                                    <div class="w-8 h-8 bg-prompt-purple/20 rounded-xl flex items-center justify-center mx-auto mb-2">
+                                        <span class="text-prompt-purple text-lg">⚡</span>
+                                    </div>
+                                    <span class="text-sm font-medium text-craft-black peer-checked:text-prompt-purple">Custom</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-craft-black mb-2">
+                            Category <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex gap-2">
+                            <select class="flex-1 p-4 glass-morphism rounded-2xl text-craft-black focus:outline-none focus:ring-2 focus:ring-craft-teal input-focus transition-all duration-300">
+                                <option value="">Select category...</option>
+                                <option value="productivity">🎯 Productivity</option>
+                                <option value="writing">✍️ Writing</option>
+                                <option value="analysis">📊 Analysis</option>
+                                <option value="communication">💬 Communication</option>
+                                <option value="creative">🎨 Creative</option>
+                                <option value="other">📂 Other</option>
+                            </select>
+                            <button class="w-12 h-12 glass-morphism rounded-2xl flex items-center justify-center hover-lift text-craft-teal">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-craft-black mb-2">Tags</label>
+                        <div class="flex flex-wrap gap-2 mb-3" id="tag-container">
+                            <!-- Tags will be added here -->
+                        </div>
+                        <div class="flex gap-2">
+                            <input 
+                                type="text" 
+                                id="tag-input"
+                                class="flex-1 p-3 glass-morphism rounded-xl text-sm text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal transition-all duration-300"
+                                placeholder="Add tag..."
+                                maxlength="20"
+                            >
+                            <button id="add-tag" class="px-4 py-3 glass-morphism rounded-xl text-sm font-medium text-craft-teal hover:bg-craft-teal hover:text-white transition-all duration-300">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Favorite Toggle -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+                                <span class="text-yellow-600 text-lg">⭐</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-craft-black">Add to Favorites</p>
+                                <p class="text-sm text-gray-500">Quick access from home screen</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-14 h-8 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-craft-teal/25 rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-craft-teal"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Character Count & Actions -->
+                <div class="glass-card rounded-3xl p-6 shadow-craft-lg">
+                    <div class="grid grid-cols-2 gap-4 mb-6 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-craft-teal char-counter" id="char-count">0</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wide">Characters</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-prompt-orange char-counter" id="size-estimate">0 B</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wide">Size</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 rounded-full h-2 mb-4">
+                        <div class="bg-gradient-to-r from-craft-teal to-craft-teal-light h-2 rounded-full transition-all duration-300" id="progress-bar" style="width: 0%"></div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button class="flex-1 glass-morphism text-craft-black py-4 rounded-2xl text-sm font-medium hover-lift border border-gray-200">
+                            💾 Save Draft
+                        </button>
+                        <button class="flex-1 gradient-teal text-white py-4 rounded-2xl text-sm font-medium shadow-teal-glow hover:scale-105 transition-all duration-300">
+                            🚀 Create & Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Data -->
+    <script type="application/json" id="template-data">
+    {
+        "task-analysis": {
+            "name": "Task Analysis Engine",
+            "preview": "You are an advanced project management AI. Analyze the following task and provide a comprehensive breakdown with timeline, resources, and optimization strategies.",
+            "fields": [
+                {"id": "context", "label": "Project Context", "type": "textarea", "placeholder": "Describe the project background and constraints..."},
+                {"id": "task", "label": "Task Details", "type": "textarea", "placeholder": "Detailed task description...", "required": true},
+                {"id": "deadline", "label": "Deadline", "type": "text", "placeholder": "Target completion date"},
+                {"id": "resources", "label": "Available Resources", "type": "textarea", "placeholder": "Team, budget, tools, etc."}
+            ]
+        },
+        "blog-writing": {
+            "name": "Blog Content Creator",
+            "preview": "You are a professional content creator. Write an engaging, SEO-optimized blog post that provides value to readers while maintaining excellent readability and flow.",
+            "fields": [
+                {"id": "topic", "label": "Topic", "type": "text", "placeholder": "Main article topic", "required": true},
+                {"id": "audience", "label": "Target Audience", "type": "text", "placeholder": "Who is your ideal reader?"},
+                {"id": "keywords", "label": "SEO Keywords", "type": "text", "placeholder": "Comma-separated keywords"},
+                {"id": "length", "label": "Article Length", "type": "select", "options": ["Short (500-800 words)", "Medium (800-1200 words)", "Long (1200-2000 words)", "Extended (2000+ words)"]},
+                {"id": "tone", "label": "Writing Tone", "type": "select", "options": ["Professional", "Casual", "Technical", "Friendly", "Authoritative"]}
+            ]
+        },
+        "data-analysis": {
+            "name": "Data Intelligence Hub",
+            "preview": "You are a data science expert. Analyze the provided dataset and extract meaningful insights, patterns, and actionable recommendations.",
+            "fields": [
+                {"id": "data-type", "label": "Data Type", "type": "select", "options": ["Sales Data", "User Behavior", "Survey Results", "Financial Data", "Other"], "required": true},
+                {"id": "objective", "label": "Analysis Objective", "type": "textarea", "placeholder": "What insights are you looking for?", "required": true},
+                {"id": "period", "label": "Time Period", "type": "text", "placeholder": "Data collection timeframe"},
+                {"id": "format", "label": "Output Format", "type": "select", "options": ["Executive Summary", "Detailed Report", "Visual Dashboard", "Presentation"]}
+            ]
+        }
+    }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCreatePrompt();
+        });
+
+        function initializeCreatePrompt() {
+            // Mode switching
+            const templateMode = document.getElementById('template-mode');
+            const freeformMode = document.getElementById('freeform-mode');
+            const templateContent = document.getElementById('template-content');
+            const freeformContent = document.getElementById('freeform-content');
+            
+            templateMode.addEventListener('click', () => switchMode('template'));
+            freeformMode.addEventListener('click', () => switchMode('freeform'));
+
+            // Template selection
+            const templateSelect = document.querySelector('select');
+            const templateData = JSON.parse(document.getElementById('template-data').textContent);
+            
+            templateSelect.addEventListener('change', function() {
+                const selected = this.value;
+                if (selected && templateData[selected]) {
+                    showTemplatePreview(templateData[selected]);
+                    generateTemplateFields(templateData[selected].fields);
+                } else {
+                    hideTemplatePreview();
+                    hideTemplateFields();
+                }
+            });
+
+            // Character counting
+            setupCharacterCounting();
+
+            // Tag management
+            setupTagManagement();
+
+            // Form validation and interactions
+            setupFormInteractions();
+        }
+
+        function switchMode(mode) {
+            const templateMode = document.getElementById('template-mode');
+            const freeformMode = document.getElementById('freeform-mode');
+            const templateContent = document.getElementById('template-content');
+            const freeformContent = document.getElementById('freeform-content');
+
+            if (mode === 'template') {
+                templateMode.classList.add('mode-active');
+                templateMode.classList.remove('text-gray-600');
+                freeformMode.classList.remove('mode-active');
+                freeformMode.classList.add('text-gray-600');
+                templateContent.classList.remove('hidden');
+                freeformContent.classList.add('hidden');
+            } else {
+                freeformMode.classList.add('mode-active');
+                freeformMode.classList.remove('text-gray-600');
+                templateMode.classList.remove('mode-active');
+                templateMode.classList.add('text-gray-600');
+                freeformContent.classList.remove('hidden');
+                templateContent.classList.add('hidden');
+            }
+        }
+
+        function showTemplatePreview(template) {
+            const preview = document.getElementById('template-preview');
+            const content = document.getElementById('preview-content');
+            
+            content.textContent = template.preview;
+            preview.classList.remove('hidden');
+        }
+
+        function hideTemplatePreview() {
+            document.getElementById('template-preview').classList.add('hidden');
+        }
+
+        function generateTemplateFields(fields) {
+            const container = document.getElementById('template-fields');
+            container.innerHTML = '';
+            
+            const card = document.createElement('div');
+            card.className = 'glass-card rounded-3xl p-6 shadow-craft-lg space-y-4';
+            
+            const title = document.createElement('h3');
+            title.className = 'text-lg font-semibold text-craft-black mb-4';
+            title.textContent = 'Template Fields';
+            card.appendChild(title);
+            
+            fields.forEach(field => {
+                const fieldDiv = document.createElement('div');
+                
+                const label = document.createElement('label');
+                label.className = 'block text-sm font-medium text-craft-black mb-2';
+                label.textContent = field.label + (field.required ? ' *' : '');
+                
+                let input;
+                if (field.type === 'textarea') {
+                    input = document.createElement('textarea');
+                    input.rows = 4;
+                    input.className = 'w-full p-4 glass-morphism rounded-2xl text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal input-focus resize-none transition-all duration-300';
+                } else if (field.type === 'select') {
+                    input = document.createElement('select');
+                    input.className = 'w-full p-4 glass-morphism rounded-2xl text-craft-black focus:outline-none focus:ring-2 focus:ring-craft-teal input-focus transition-all duration-300';
+                    
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = 'Choose...';
+                    input.appendChild(defaultOption);
+                    
+                    if (field.options) {
+                        field.options.forEach(option => {
+                            const optionElement = document.createElement('option');
+                            optionElement.value = option;
+                            optionElement.textContent = option;
+                            input.appendChild(optionElement);
+                        });
+                    }
+                } else {
+                    input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'w-full p-4 glass-morphism rounded-2xl text-craft-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-craft-teal input-focus transition-all duration-300';
+                }
+                
+                if (field.placeholder) {
+                    input.placeholder = field.placeholder;
+                }
+                
+                fieldDiv.appendChild(label);
+                fieldDiv.appendChild(input);
+                card.appendChild(fieldDiv);
+            });
+            
+            container.appendChild(card);
+            container.classList.remove('hidden');
+        }
+
+        function hideTemplateFields() {
+            document.getElementById('template-fields').classList.add('hidden');
+        }
+
+        function setupCharacterCounting() {
+            const textareas = document.querySelectorAll('textarea');
+            const charCount = document.getElementById('char-count');
+            const sizeEstimate = document.getElementById('size-estimate');
+            const progressBar = document.getElementById('progress-bar');
+            
+            function updateCounts() {
+                let totalChars = 0;
+                textareas.forEach(textarea => {
+                    totalChars += textarea.value.length;
+                });
+                
+                const bytes = new Blob([totalChars.toString()]).size;
+                const maxChars = 5000;
+                const progress = Math.min((totalChars / maxChars) * 100, 100);
+                
+                charCount.textContent = totalChars.toLocaleString();
+                sizeEstimate.textContent = formatBytes(bytes);
+                progressBar.style.width = progress + '%';
+                
+                if (progress > 80) {
+                    progressBar.className = progressBar.className.replace('from-craft-teal to-craft-teal-light', 'from-red-400 to-red-600');
+                } else if (progress > 60) {
+                    progressBar.className = progressBar.className.replace('from-craft-teal to-craft-teal-light', 'from-yellow-400 to-orange-500');
+                } else {
+                    progressBar.className = 'bg-gradient-to-r from-craft-teal to-craft-teal-light h-2 rounded-full transition-all duration-300';
+                }
+            }
+            
+            document.addEventListener('input', updateCounts);
+        }
+
+        function setupTagManagement() {
+            const tagInput = document.getElementById('tag-input');
+            const addTagButton = document.getElementById('add-tag');
+            const tagContainer = document.getElementById('tag-container');
+            
+            function addTag(text) {
+                if (!text.trim()) return;
+                
+                const tag = document.createElement('span');
+                tag.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm bg-craft-teal/10 text-craft-teal border border-craft-teal/30';
+                tag.innerHTML = `
+                    ${text.trim()}
+                    <button type="button" class="ml-2 hover:text-red-500 transition-colors">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                `;
+                
+                tag.querySelector('button').addEventListener('click', () => tag.remove());
+                tagContainer.appendChild(tag);
+                tagInput.value = '';
+            }
+            
+            addTagButton.addEventListener('click', () => addTag(tagInput.value));
+            tagInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTag(tagInput.value);
+                }
+            });
+        }
+
+        function setupFormInteractions() {
+            // Enhanced button interactions
+            const saveButtons = document.querySelectorAll('button[class*="gradient-teal"]');
+            saveButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const original = this.innerHTML;
+                    this.innerHTML = '<svg class="w-4 h-4 animate-spin mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle></svg>';
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.innerHTML = '✅ Saved!';
+                        this.className = 'flex-1 bg-green-500 text-white py-4 rounded-2xl text-sm font-medium shadow-lg transition-all duration-300';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = original;
+                            this.className = 'flex-1 gradient-teal text-white py-4 rounded-2xl text-sm font-medium shadow-teal-glow hover:scale-105 transition-all duration-300';
+                            this.disabled = false;
+                        }, 2000);
+                    }, 1000);
+                });
+            });
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>

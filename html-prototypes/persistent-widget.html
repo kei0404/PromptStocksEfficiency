@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptStocks Widget - プロンプト選択</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'craft-teal': '#1DB584',
+                        'craft-teal-light': '#20D394',
+                        'craft-teal-dark': '#1A9D75',
+                        'craft-gray': '#F8F9FA',
+                        'widget-bg': '#1C1C1E',
+                        'widget-surface': '#2C2C2E',
+                        'widget-text': '#FFFFFF',
+                        'widget-secondary': '#8E8E93'
+                    },
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-subtle': 'pulseSubtle 2s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' }
+                        },
+                        slideUp: {
+                            'from': { transform: 'translateY(10px)', opacity: '0' },
+                            'to': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        pulseSubtle: {
+                            '0%, 100%': { opacity: '0.8' },
+                            '50%': { opacity: '1' }
+                        }
+                    },
+                    backdropBlur: {
+                        'widget': '20px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .widget-glass {
+            background: rgba(28, 28, 30, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .widget-item {
+            background: rgba(44, 44, 46, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .widget-item:hover {
+            background: rgba(44, 44, 46, 0.8);
+            border-color: rgba(29, 181, 132, 0.3);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="font-sf min-h-screen flex items-center justify-center p-4">
+    
+    <!-- Widget Container -->
+    <div class="widget-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl animate-fade-in">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 bg-craft-teal rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-sm font-semibold text-widget-text">PromptStocks</h1>
+            </div>
+            <span class="text-xs text-widget-secondary">247</span>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="flex space-x-1 mb-3 animate-slide-up" style="animation-delay: 0.1s;">
+            <button class="category-tab active px-2 py-1 rounded-md text-xs font-medium bg-craft-teal text-white" data-category="productivity">
+                効率化
+            </button>
+            <button class="category-tab px-2 py-1 rounded-md text-xs font-medium text-widget-secondary hover:text-widget-text transition-colors" data-category="writing">
+                文章
+            </button>
+            <button class="category-tab px-2 py-1 rounded-md text-xs font-medium text-widget-secondary hover:text-widget-text transition-colors" data-category="analysis">
+                分析
+            </button>
+            <button class="category-tab px-2 py-1 rounded-md text-xs font-medium text-widget-secondary hover:text-widget-text transition-colors" data-category="communication">
+                連絡
+            </button>
+        </div>
+
+        <!-- Prompt List -->
+        <div class="space-y-1.5 max-h-32 overflow-y-auto" id="prompt-list">
+            
+            <!-- Productivity Prompts -->
+            <div class="prompt-item widget-item rounded-lg p-2 flex items-center justify-between transition-all animate-slide-up" style="animation-delay: 0.2s;" data-prompt="project-manager">
+                <span class="text-sm text-widget-text truncate flex-1">プロジェクト管理</span>
+                <button class="copy-btn p-1.5 text-widget-secondary hover:text-craft-teal transition-colors ml-2 flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="prompt-item widget-item rounded-lg p-2 flex items-center justify-between transition-all animate-slide-up" style="animation-delay: 0.3s;" data-prompt="task-optimizer">
+                <span class="text-sm text-widget-text truncate flex-1">タスク最適化</span>
+                <button class="copy-btn p-1.5 text-widget-secondary hover:text-craft-teal transition-colors ml-2 flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="prompt-item widget-item rounded-lg p-2 flex items-center justify-between transition-all animate-slide-up" style="animation-delay: 0.4s;" data-prompt="meeting-planner">
+                <span class="text-sm text-widget-text truncate flex-1">会議計画</span>
+                <button class="copy-btn p-1.5 text-widget-secondary hover:text-craft-teal transition-colors ml-2 flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="prompt-item widget-item rounded-lg p-2 flex items-center justify-between transition-all animate-slide-up" style="animation-delay: 0.5s;" data-prompt="workflow-design">
+                <span class="text-sm text-widget-text truncate flex-1">ワークフロー設計</span>
+                <button class="copy-btn p-1.5 text-widget-secondary hover:text-craft-teal transition-colors ml-2 flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="flex items-center justify-center mt-3 pt-2 border-t border-white/10 animate-slide-up" style="animation-delay: 0.6s;">
+            <button id="open-app-btn" class="flex items-center space-x-1 text-craft-teal hover:text-craft-teal-light transition-colors text-xs">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+                <span>アプリを開く</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Selection Feedback -->
+    <div id="selection-feedback" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-craft-teal text-white px-6 py-3 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300">
+        <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span id="selection-text">プロンプトを選択しました</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            const openAppBtn = document.getElementById('open-app-btn');
+            const selectionFeedback = document.getElementById('selection-feedback');
+            const selectionText = document.getElementById('selection-text');
+
+            // Mock data for different categories
+            const promptData = {
+                productivity: [
+                    'プロジェクト管理',
+                    'タスク最適化', 
+                    '会議計画',
+                    'ワークフロー設計'
+                ],
+                writing: [
+                    'ブログ記事作成',
+                    '技術文書執筆',
+                    'メール作成',
+                    '企画書作成'
+                ],
+                analysis: [
+                    'データ分析',
+                    '市場調査',
+                    'トレンド分析',
+                    'レポート作成'
+                ],
+                communication: [
+                    'プレゼン準備',
+                    '顧客対応',
+                    'チーム連絡',
+                    '営業提案'
+                ]
+            };
+
+            // Category tabs
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active state
+                    categoryTabs.forEach(t => {
+                        t.classList.remove('active', 'bg-craft-teal', 'text-white');
+                        t.classList.add('text-widget-secondary');
+                    });
+                    
+                    this.classList.add('active', 'bg-craft-teal', 'text-white');
+                    this.classList.remove('text-widget-secondary');
+                    
+                    // Update prompt list
+                    const category = this.dataset.category;
+                    updatePromptList(category);
+                });
+            });
+
+            // Update prompt list based on category
+            function updatePromptList(category) {
+                const promptList = document.getElementById('prompt-list');
+                const prompts = promptData[category] || [];
+                
+                promptList.innerHTML = '';
+                
+                prompts.forEach((prompt, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'prompt-item widget-item rounded-lg p-2 flex items-center justify-between transition-all animate-slide-up';
+                    div.style.animationDelay = `${0.2 + index * 0.1}s`;
+                    
+                    div.innerHTML = `
+                        <span class="text-sm text-widget-text truncate flex-1">${prompt}</span>
+                        <button class="copy-btn p-1.5 text-widget-secondary hover:text-craft-teal transition-colors ml-2 flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    `;
+                    
+                    promptList.appendChild(div);
+                    
+                    // Add copy event listener
+                    const copyBtn = div.querySelector('.copy-btn');
+                    copyBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        copyPrompt(prompt, this);
+                    });
+                });
+            }
+
+            // Copy functionality
+            function copyPrompt(promptName, button) {
+                // Visual feedback for copy button
+                const svg = button.querySelector('svg');
+                svg.style.transform = 'scale(0.8)';
+                button.style.color = '#1DB584';
+                
+                setTimeout(() => {
+                    svg.style.transform = 'scale(1)';
+                    button.style.color = '';
+                }, 200);
+                
+                // Show selection feedback
+                selectionText.textContent = `"${promptName}" をコピーしました`;
+                selectionFeedback.style.opacity = '1';
+                selectionFeedback.style.pointerEvents = 'auto';
+                
+                setTimeout(() => {
+                    selectionFeedback.style.opacity = '0';
+                    selectionFeedback.style.pointerEvents = 'none';
+                }, 2000);
+                
+                // Simulate copying to clipboard
+                console.log('Copied prompt:', promptName);
+                
+                // In a real app, you would copy the actual prompt content to clipboard
+                // navigator.clipboard.writeText(actualPromptContent);
+            }
+
+            // Initialize copy buttons for default prompts
+            copyButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const promptName = this.parentElement.querySelector('span').textContent;
+                    copyPrompt(promptName, this);
+                });
+            });
+
+            // Open app button
+            openAppBtn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    // Simulate opening main app
+                    console.log('Opening main app...');
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

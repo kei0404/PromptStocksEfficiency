@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "PromptStocks",
+    "slug": "promptstocks",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#1DB584"
+    },
+    "platforms": ["ios", "android"],
+    "sdkVersion": "53.0.0"
+  }
+}
