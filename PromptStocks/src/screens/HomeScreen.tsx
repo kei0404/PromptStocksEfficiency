@@ -292,12 +292,20 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                   </Text>
                   <Text style={styles.promptSize}>{formatBytes(prompt.size)}</Text>
                 </View>
-                <Button
-                  title="実行"
-                  onPress={() => handleCopyPrompt(prompt.id)}
-                  size="small"
-                  variant="primary"
-                />
+                <View style={styles.promptActions}>
+                  <TouchableOpacity 
+                    style={styles.editButton}
+                    onPress={() => navigation.navigate('EditPrompt', { promptId: prompt.id })}
+                  >
+                    <Text style={styles.editButtonText}>✏️</Text>
+                  </TouchableOpacity>
+                  <Button
+                    title="実行"
+                    onPress={() => handleCopyPrompt(prompt.id)}
+                    size="small"
+                    variant="primary"
+                  />
+                </View>
               </View>
             </Card>
           ))}
@@ -347,7 +355,10 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.fabIcon}>+</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => navigation.navigate('EditPrompt', { promptId: 'prompt-1' })}
+        >
           <View style={styles.navIcon}>
             <Text style={styles.navIconText}>✏️</Text>
           </View>
@@ -630,6 +641,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
+  },
+  promptActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  editButton: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  editButtonText: {
+    fontSize: 14,
   },
   promptDate: {
     fontSize: 12,

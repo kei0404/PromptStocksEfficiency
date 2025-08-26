@@ -476,6 +476,9 @@
             const closeSuccessModal = document.getElementById('close-success-modal');
             const backBtn = document.getElementById('back-btn');
 
+            // Load prompt data from URL parameter
+            loadPromptData();
+
             // Back button navigation
             backBtn.addEventListener('click', function() {
                 // Add loading animation
@@ -664,6 +667,185 @@
                 el.style.transition = 'all 0.6s ease-out';
                 observer.observe(el);
             });
+        }
+
+        function loadPromptData() {
+            // Get prompt ID from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const promptId = urlParams.get('id');
+            
+            // Sample prompt data (in real app, this would come from storage)
+            const promptData = {
+                'prompt-1': {
+                    title: '会議議事録を効率的に作成する',
+                    category: 'efficiency',
+                    content: `あなたは経験豊富な会議ファシリテーターです。以下の会議の録音内容を基に、構造化された議事録を作成してください。
+
+## 作成する議事録に含める要素：
+1. **会議基本情報**（日時、参加者、議題）
+2. **主要な議論ポイント**（決定事項、課題、意見）
+3. **アクションアイテム**（担当者、期限、優先度）
+4. **次回までの宿題**
+5. **その他の重要な情報**
+
+## 出力形式：
+- 簡潔で読みやすい箇条書き
+- 重要度に応じた優先順位付け
+- 期限付きタスクの明確化`,
+                    tags: ['効率化', '会議', '議事録', 'ビジネス', '構造化'],
+                    isFavorite: true,
+                    isTemplate: false,
+                    isPrivate: true
+                },
+                'prompt-2': {
+                    title: 'SEO最適化ブログ記事作成',
+                    category: 'writing',
+                    content: `専門的なSEOライターとして、指定されたキーワードを効果的に使用した高品質なブログ記事を作成してください。
+
+## 記事要件：
+1. **キーワード密度**: 1-2%の適切な配置
+2. **構造**: H1, H2, H3を使った階層構造
+3. **読みやすさ**: 短い段落と適切な改行
+4. **価値提供**: 読者に具体的な価値を提供
+5. **CTA**: 適切な行動喚起を含める
+
+## 出力形式：
+- SEO最適化されたタイトル
+- メタディスクリプション
+- 本文（1500-2000文字）
+- 内部リンク提案`,
+                    tags: ['SEO', 'ブログ', 'マーケティング', 'コンテンツ', 'Web'],
+                    isFavorite: false,
+                    isTemplate: true,
+                    isPrivate: true
+                },
+                'prompt-3': {
+                    title: 'データ分析レポート生成',
+                    category: 'analysis',
+                    content: `専門的なデータアナリストとして、提供されたデータセットを分析し、実用的な洞察を含む包括的なレポートを作成してください。
+
+## 分析手順：
+1. **データ概要**: データセットの基本統計
+2. **トレンド分析**: 時系列での変化パターン
+3. **相関関析**: 変数間の関係性
+4. **異常値検出**: データの品質評価
+5. **予測モデル**: 将来のトレンド予測
+
+## 出力形式：
+- エグゼクティブサマリー
+- 詳細分析結果
+- 視覚化提案
+- アクションプラン`,
+                    tags: ['データ分析', 'レポート', 'ビジネス', '統計', '予測'],
+                    isFavorite: true,
+                    isTemplate: false,
+                    isPrivate: true
+                },
+                'prompt-4': {
+                    title: 'プロフェッショナルメール作成',
+                    category: 'writing',
+                    content: `丁寧で効果的なビジネスメールを作成してください。相手の立場を考慮し、明確で簡潔な表現を心がけてください。
+
+## メール構成要素：
+1. **件名**: 内容が一目で分かる明確な件名
+2. **挨拶**: 適切な敬語と挨拶文
+3. **本文**: 要点を整理した分かりやすい内容
+4. **行動喚起**: 具体的な次のステップ
+5. **結び**: 丁寧な結びの言葉
+
+## 注意事項：
+- 読みやすい段落構成
+- 重要な情報の強調
+- 相手に配慮した表現`,
+                    tags: ['コミュニケーション', 'メール', 'ビジネス', '敬語'],
+                    isFavorite: false,
+                    isTemplate: false,
+                    isPrivate: true
+                },
+                'prompt-5': {
+                    title: 'タスク優先度自動分析',
+                    category: 'efficiency',
+                    content: `プロジェクト管理のエキスパートとして、提供されたタスクリストを分析し、緊急度と重要度に基づいて優先順位を付けてください。
+
+## 分析基準：
+1. **緊急度**: 期限までの時間
+2. **重要度**: ビジネスインパクト
+3. **依存関係**: 他タスクとの関連性
+4. **リソース**: 必要な時間と人員
+5. **リスク**: 遅延時の影響
+
+## 出力形式：
+- 優先度マトリックス（高/中/低）
+- 推奨実行順序
+- リソース配分提案
+- リスク評価`,
+                    tags: ['タスク管理', '優先度', '効率化', 'プロジェクト'],
+                    isFavorite: false,
+                    isTemplate: true,
+                    isPrivate: true
+                }
+            };
+
+            if (promptId && promptData[promptId]) {
+                const data = promptData[promptId];
+                
+                // Update form fields
+                document.getElementById('title-input').value = data.title;
+                document.getElementById('content-textarea').value = data.content;
+                
+                // Update category selection
+                const categorySelect = document.querySelector('select');
+                categorySelect.value = data.category;
+                
+                // Update tags
+                const existingTags = document.querySelectorAll('.tag-button');
+                existingTags.forEach(tag => tag.remove());
+                
+                const tagContainer = document.querySelector('.flex.flex-wrap.gap-2.mb-4');
+                data.tags.forEach((tagText, index) => {
+                    const tagButton = document.createElement('button');
+                    tagButton.className = `tag-button ${index === 0 ? 'selected' : ''} px-3 py-2 rounded-xl text-sm font-medium`;
+                    tagButton.textContent = tagText;
+                    tagButton.addEventListener('click', function() {
+                        this.classList.toggle('selected');
+                    });
+                    tagContainer.appendChild(tagButton);
+                });
+                
+                // Update toggles
+                document.getElementById('favorite-toggle').checked = data.isFavorite;
+                document.getElementById('template-toggle').checked = data.isTemplate;
+                document.getElementById('private-toggle').checked = data.isPrivate;
+                
+                // Update toggle UI
+                updateToggleUI('favorite-toggle');
+                updateToggleUI('template-toggle');
+                updateToggleUI('private-toggle');
+                
+                // Update header subtitle with prompt info
+                const subtitle = document.querySelector('header p');
+                subtitle.textContent = `${data.category === 'efficiency' ? '🎯 作業効率' : data.category === 'writing' ? '✍️ 文章作成' : data.category === 'analysis' ? '📊 データ分析' : '💬 コミュニケーション'} • ${data.tags[0]}`;
+                
+                // Update word count
+                updateWordCount();
+                autoResize(document.getElementById('content-textarea'));
+            }
+        }
+
+        function updateToggleUI(toggleId) {
+            const toggle = document.getElementById(toggleId);
+            const slider = toggle.nextElementSibling.querySelector('div:last-child');
+            const track = toggle.nextElementSibling.querySelector('div:first-child');
+            
+            if (toggle.checked) {
+                slider.classList.add('translate-x-6', 'gradient-teal');
+                track.classList.add('bg-craft-teal/30');
+                track.classList.remove('bg-gray-300');
+            } else {
+                slider.classList.remove('translate-x-6', 'gradient-teal');
+                track.classList.remove('bg-craft-teal/30');
+                track.classList.add('bg-gray-300');
+            }
         }
     </script>
 </body>
