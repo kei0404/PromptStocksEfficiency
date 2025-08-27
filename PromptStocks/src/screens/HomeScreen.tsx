@@ -357,7 +357,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('EditPrompt', { promptId: 'prompt-1' })}
+          onPress={() => navigation.navigate('PromptList')}
         >
           <View style={styles.navIcon}>
             <Text style={styles.navIconText}>✏️</Text>

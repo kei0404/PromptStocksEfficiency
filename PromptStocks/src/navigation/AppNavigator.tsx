@@ -9,6 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import CategoriesScreen from '../screens/CategoriesScreen';
 import CreatePromptScreen from '../screens/CreatePromptScreen';
 import EditPromptScreen from '../screens/EditPromptScreen';
+import PromptListScreen from '../screens/PromptListScreen';
 import PromptDetailScreen from '../screens/PromptDetailScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CategoryDetailScreen from '../screens/CategoryDetailScreen';
@@ -71,6 +72,10 @@ const AppNavigator: React.FC = () => {
           options={{
             presentation: 'modal',
           }}
+        />
+        <Stack.Screen 
+          name="PromptList" 
+          component={PromptListScreen}
         />
         <Stack.Screen name="PromptDetail" component={PromptDetailScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />

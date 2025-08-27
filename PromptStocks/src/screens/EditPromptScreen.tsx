@@ -10,91 +10,64 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import PromptManager from '../services/PromptManager';
+import CategoryManager from '../services/CategoryManager';
+import { Prompt } from '../models/Prompt';
+import { Category } from '../models/Category';
 
 interface Props {
   navigation: any;
   route: any;
 }
 
-interface PromptData {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  tags: string[];
-  isFavorite: boolean;
-  isTemplate: boolean;
-  isPrivate: boolean;
-}
-
 const EditPromptScreen: React.FC<Props> = ({ navigation, route }) => {
+  const [prompt, setPrompt] = useState<Prompt | null>(null);
+  const [category, setCategory] = useState<Category | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('efficiency');
+  const [categoryId, setCategoryId] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
   const [isFavorite, setIsFavorite] = useState(false);
   const [isTemplate, setIsTemplate] = useState(false);
   const [isPrivate, setIsPrivate] = useState(true);
   const [wordCount, setWordCount] = useState(0);
-
-  // Sample prompt data
-  const samplePrompts: Record<string, PromptData> = {
-    'prompt-1': {
-      id: 'prompt-1',
-      title: '会議議事録を効率的に作成する',
-      category: 'efficiency',
-      content: `あなたは経験豊富な会議ファシリテーターです。以下の会議の録音内容を基に、構造化された議事録を作成してください。
-
-## 作成する議事録に含める要素：
-1. **会議基本情報**（日時、参加者、議題）
-2. **主要な議論ポイント**（決定事項、課題、意見）
-3. **アクションアイテム**（担当者、期限、優先度）
-4. **次回までの宿題**
-5. **その他の重要な情報**
-
-## 出力形式：
-- 簡潔で読みやすい箇条書き
-- 重要度に応じた優先順位付け
-- 期限付きタスクの明確化`,
-      tags: ['効率化', '会議', '議事録', 'ビジネス'],
-      isFavorite: true,
-      isTemplate: false,
-      isPrivate: true,
-    },
-    'prompt-2': {
-      id: 'prompt-2',
-      title: 'SEO最適化ブログ記事作成',
-      category: 'writing',
-      content: `専門的なSEOライターとして、指定されたキーワードを効果的に使用した高品質なブログ記事を作成してください。
-
-## 記事要件：
-1. **キーワード密度**: 1-2%の適切な配置
-2. **構造**: H1, H2, H3を使った階層構造
-3. **読みやすさ**: 短い段落と適切な改行
-4. **価値提供**: 読者に具体的な価値を提供
-5. **CTA**: 適切な行動喚起を含める`,
-      tags: ['SEO', 'ブログ', 'マーケティング'],
-      isFavorite: false,
-      isTemplate: true,
-      isPrivate: true,
-    },
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load prompt data if editing existing prompt
-    const promptId = route.params?.promptId;
-    if (promptId && samplePrompts[promptId]) {
-      const promptData = samplePrompts[promptId];
-      setTitle(promptData.title);
-      setContent(promptData.content);
-      setCategory(promptData.category);
-      setTags(promptData.tags);
-      setIsFavorite(promptData.isFavorite);
-      setIsTemplate(promptData.isTemplate);
-      setIsPrivate(promptData.isPrivate);
-    }
+    loadPromptData();
   }, [route.params]);
+
+  const loadPromptData = async () => {
+    const promptId = route.params?.promptId;
+    if (promptId) {
+      try {
+        const promptData = await PromptManager.getPrompt(promptId);
+        if (promptData) {
+          setPrompt(promptData);
+          setTitle(promptData.title);
+          setContent(promptData.content);
+          setCategoryId(promptData.categoryId);
+          setTags(promptData.tags || []);
+          setIsFavorite(promptData.isFavorite);
+          setIsTemplate(false); // This might need to be added to Prompt model
+          setIsPrivate(true);   // This might need to be added to Prompt model
+          
+          // Load category data
+          const categoryData = await CategoryManager.getCategoryById(promptData.categoryId);
+          setCategory(categoryData);
+        } else {
+          Alert.alert('エラー', 'プロンプトが見つかりません', [
+            { text: 'OK', onPress: () => navigation.goBack() }
+          ]);
+        }
+      } catch (error) {
+        console.error('Failed to load prompt:', error);
+        Alert.alert('エラー', 'プロンプトの読み込みに失敗しました');
+      }
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     // Update word count
@@ -102,23 +75,44 @@ const EditPromptScreen: React.FC<Props> = ({ navigation, route }) => {
     setWordCount(words);
   }, [content]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim() || !content.trim()) {
       Alert.alert('エラー', 'タイトルとプロンプト内容は必須です。');
       return;
     }
 
-    // In real app, save to storage here
-    Alert.alert(
-      '保存完了！',
-      'プロンプトが正常に保存されました',
-      [
-        {
-          text: 'OK',
-          onPress: () => navigation.goBack(),
-        },
-      ]
-    );
+    if (!prompt) {
+      Alert.alert('エラー', 'プロンプトデータが見つかりません。');
+      return;
+    }
+
+    try {
+      const updatedPrompt = await PromptManager.updatePrompt(prompt.id, {
+        title: title.trim(),
+        content: content.trim(),
+        tags: tags,
+        isFavorite: isFavorite,
+        updatedAt: new Date(),
+      });
+
+      if (updatedPrompt) {
+        Alert.alert(
+          '保存完了！',
+          'プロンプトが正常に更新されました',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.goBack(),
+            },
+          ]
+        );
+      } else {
+        Alert.alert('エラー', 'プロンプトの更新に失敗しました');
+      }
+    } catch (error) {
+      console.error('Failed to save prompt:', error);
+      Alert.alert('エラー', 'プロンプトの保存に失敗しました');
+    }
   };
 
   const toggleTag = (tagToToggle: string) => {
@@ -136,17 +130,25 @@ const EditPromptScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  const getCategoryInfo = (cat: string) => {
-    const categories = {
-      efficiency: { icon: '🎯', name: '作業効率', color: '#1DB584' },
-      writing: { icon: '✍️', name: '文章作成', color: '#3B82F6' },
-      analysis: { icon: '📊', name: 'データ分析', color: '#8B5CF6' },
-      communication: { icon: '💬', name: 'コミュニケーション', color: '#EC4899' },
-    };
-    return categories[cat] || categories.efficiency;
-  };
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>読み込み中...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
-  const categoryInfo = getCategoryInfo(category);
+  if (!prompt) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>プロンプトが見つかりません</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -162,7 +164,7 @@ const EditPromptScreen: React.FC<Props> = ({ navigation, route }) => {
           <View style={styles.headerTitle}>
             <Text style={styles.title}>プロンプト編集</Text>
             <Text style={styles.subtitle}>
-              {categoryInfo.icon} {categoryInfo.name}
+              {category?.icon || '📁'} {category?.name || 'カテゴリ'}
             </Text>
           </View>
         </View>
@@ -188,34 +190,15 @@ const EditPromptScreen: React.FC<Props> = ({ navigation, route }) => {
           </View>
         </View>
 
-        {/* Category Selection */}
+        {/* Category Display */}
         <View style={styles.section}>
           <Text style={styles.label}>カテゴリ</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-            {Object.entries({
-              efficiency: { icon: '🎯', name: '作業効率' },
-              writing: { icon: '✍️', name: '文章作成' },
-              analysis: { icon: '📊', name: 'データ分析' },
-              communication: { icon: '💬', name: 'コミュニケーション' },
-            }).map(([key, cat]) => (
-              <TouchableOpacity
-                key={key}
-                style={[
-                  styles.categoryButton,
-                  category === key && styles.categoryButtonActive
-                ]}
-                onPress={() => setCategory(key)}
-              >
-                <Text style={styles.categoryIcon}>{cat.icon}</Text>
-                <Text style={[
-                  styles.categoryText,
-                  category === key && styles.categoryTextActive
-                ]}>
-                  {cat.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <View style={styles.categoryDisplay}>
+            <View style={[styles.categoryIcon, { backgroundColor: category?.color || '#1DB584' }]}>
+              <Text style={styles.categoryIconText}>{category?.icon || '📁'}</Text>
+            </View>
+            <Text style={styles.categoryDisplayName}>{category?.name || 'カテゴリ'}</Text>
+          </View>
         </View>
 
         {/* Content Input */}
@@ -445,42 +428,53 @@ const styles = StyleSheet.create({
     color: '#374151',
     minHeight: 56,
   },
-  categoryScroll: {
-    marginHorizontal: -4,
-  },
-  categoryButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  categoryDisplay: {
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginHorizontal: 4,
+    padding: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    minWidth: 80,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  categoryButtonActive: {
-    backgroundColor: '#1DB584',
-    shadowColor: '#1DB584',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
+    elevation: 3,
   },
   categoryIcon: {
-    fontSize: 20,
-    marginBottom: 4,
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
   },
-  categoryText: {
-    fontSize: 12,
-    fontWeight: '500',
+  categoryIconText: {
+    fontSize: 16,
+    color: 'white',
+  },
+  categoryDisplayName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#374151',
+    fontFamily: '-apple-system',
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
     color: '#6B7280',
   },
-  categoryTextActive: {
-    color: 'white',
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#EF4444',
   },
   contentHeader: {
     flexDirection: 'row',
