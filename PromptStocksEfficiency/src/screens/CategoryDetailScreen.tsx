@@ -115,44 +115,6 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  const handleDelete = () => {
-    if (!category) return;
-
-    if (prompts.length > 0) {
-      Alert.alert(
-        '削除できません',
-        'このカテゴリにはプロンプトが含まれています。プロンプトを他のカテゴリに移動するか削除してから、カテゴリを削除してください。'
-      );
-      return;
-    }
-
-    Alert.alert(
-      '削除確認',
-      `「${category.name}」カテゴリを削除しますか？`,
-      [
-        { text: 'キャンセル', style: 'cancel' },
-        {
-          text: '削除',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const success = await CategoryManager.deleteCategory(category.id);
-              if (success) {
-                Alert.alert('成功', 'カテゴリを削除しました', [
-                  { text: 'OK', onPress: () => navigation.goBack() }
-                ]);
-              } else {
-                Alert.alert('エラー', 'カテゴリの削除に失敗しました');
-              }
-            } catch (error) {
-              console.error('Failed to delete category:', error);
-              Alert.alert('エラー', 'カテゴリの削除に失敗しました');
-            }
-          }
-        }
-      ]
-    );
-  };
 
   const handlePromptPress = (promptId: string) => {
     navigation.navigate('PromptDetail', { promptId });
@@ -442,29 +404,6 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
               )}
             </Card>
 
-            {/* Danger Zone */}
-            <Card style={styles.dangerCard}>
-              <Text style={styles.dangerTitle}>危険な操作</Text>
-              <Text style={styles.dangerDescription}>
-                カテゴリを削除すると元に戻せません。
-                {prompts.length > 0 && '先にすべてのプロンプトを移動または削除してください。'}
-              </Text>
-              <TouchableOpacity
-                style={[
-                  styles.dangerButton,
-                  prompts.length > 0 && styles.dangerButtonDisabled
-                ]}
-                onPress={handleDelete}
-                disabled={prompts.length > 0}
-              >
-                <Text style={[
-                  styles.dangerButtonText,
-                  prompts.length > 0 && styles.dangerButtonTextDisabled
-                ]}>
-                  カテゴリを削除
-                </Text>
-              </TouchableOpacity>
-            </Card>
           </View>
         )}
       </ScrollView>
@@ -684,43 +623,6 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     textAlign: 'center',
     fontFamily: '-apple-system',
-  },
-  dangerCard: {
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.2)',
-  },
-  dangerTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#EF4444',
-    marginBottom: 8,
-    fontFamily: '-apple-system',
-  },
-  dangerDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 16,
-    fontFamily: '-apple-system',
-  },
-  dangerButton: {
-    backgroundColor: '#EF4444',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  dangerButtonDisabled: {
-    backgroundColor: '#D1D5DB',
-  },
-  dangerButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-    fontFamily: '-apple-system',
-  },
-  dangerButtonTextDisabled: {
-    color: '#9CA3AF',
   },
   formGroup: {
     marginBottom: 24,
