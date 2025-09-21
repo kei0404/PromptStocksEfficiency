@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1242" height="2688" viewBox="0 0 1242 2688" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1242" height="2688" fill="#1976D2"/>
+  
+  <!-- Gradient Overlay -->
+  <rect width="1242" height="2688" fill="url(#gradient)" opacity="0.95"/>
+  
+  <!-- Floating Particles -->
+  <circle cx="124" cy="269" r="6" fill="rgba(144, 202, 249, 0.4)"/>
+  <circle cx="1055" cy="806" r="9" fill="rgba(187, 222, 251, 0.3)"/>
+  <circle cx="248" cy="2150" r="4.5" fill="rgba(227, 242, 253, 0.5)"/>
+  
+  <!-- Logo Container Background -->
+  <rect x="561" y="1164" width="120" height="120" rx="30" fill="rgba(227, 242, 253, 0.2)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+  
+  <!-- Logo Icon (💡 emoji approximation) -->
+  <text x="621" y="1248" font-family="Arial, sans-serif" font-size="48" text-anchor="middle" fill="#FFC107">💡</text>
+  
+  <!-- App Name -->
+  <text x="621" y="1344" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#FFFFFF" letter-spacing="-0.5px">PromptStocksEfficiency</text>
+  
+  <!-- Tagline -->
+  <text x="621" y="1386" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="500" text-anchor="middle" fill="rgba(255, 255, 255, 0.8)">効率化プロンプト管理</text>
+  
+  <!-- Loading Dots -->
+  <g transform="translate(609, 1476)">
+    <circle cx="-12" cy="0" r="4" fill="rgba(227, 242, 253, 0.6)"/>
+    <circle cx="0" cy="0" r="4" fill="#BBDEFB"/>
+    <circle cx="12" cy="0" r="4" fill="rgba(227, 242, 253, 0.6)"/>
+  </g>
+  
+  <!-- Footer Text -->
+  <text x="621" y="2538" font-family="system-ui, -apple-system, sans-serif" font-size="14" text-anchor="middle" fill="rgba(255, 255, 255, 0.7)">オフライン対応 • プライバシー重視</text>
+  <text x="621" y="2568" font-family="system-ui, -apple-system, sans-serif" font-size="12" text-anchor="middle" fill="rgba(255, 255, 255, 0.5)">v1.0.0</text>
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E88E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565C0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
