@@ -28,8 +28,15 @@ npm install -D jest @testing-library/react-native detox
 
 ### Development
 ```bash
-# Start development server
-npx expo start
+# Start development server (preferred method)
+npm start
+
+# Start with tunnel for ExpoGo
+npm run start:tunnel
+
+# Alternative start methods (if npx has issues)
+npm run start:local
+./node_modules/.bin/expo start --tunnel
 
 # Run on iOS simulator
 npx expo start --ios

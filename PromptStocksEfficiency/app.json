@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "PromptStocksEfficiency",
+    "slug": "promptstocksefficiency",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#1976D2"
+    },
+    "platforms": ["ios", "android"]
+  }
+}
