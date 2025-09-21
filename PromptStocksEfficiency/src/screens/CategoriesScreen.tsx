@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,65 +7,88 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
-  Platform
+  Platform,
+  FlatList,
+  RefreshControl,
+  StatusBar,
+  Dimensions,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import CategoryManager from '../services/CategoryManager';
 import { Category } from '../models/Category';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { BlueTheme, Typography, ComponentStyles } from '../styles/theme';
 
 interface Props {
   navigation: any;
 }
 
+const { width } = Dimensions.get('window');
+
 const CategoriesScreen: React.FC<Props> = ({ navigation }) => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
 
-  const loadCategories = async () => {
+  const loadData = async () => {
     try {
-      const categoryList = await CategoryManager.getAllCategories();
-      setCategories(categoryList);
+      // Force update categories to ensure latest version is loaded
+      await CategoryManager.forceUpdateCategories();
+      const allCategories = await CategoryManager.getAllCategories();
+      setCategories(allCategories);
     } catch (error) {
       console.error('Failed to load categories:', error);
       Alert.alert('エラー', 'カテゴリの読み込みに失敗しました');
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleCategoryPress = (category: Category) => {
-    navigation.navigate('CategoryDetail', { categoryId: category.id });
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await loadData();
+    setIsRefreshing(false);
   };
 
-  const handleCreateCategory = () => {
-    Alert.prompt(
-      '新しいカテゴリ',
-      'カテゴリ名を入力してください',
-      async (text) => {
-        if (text && text.trim()) {
-          try {
-            await CategoryManager.createCategory({
-              name: text.trim(),
-              color: '#1DB584',
-              icon: 'folder',
-              isDefault: false
-            });
-            loadCategories();
-          } catch (error) {
-            Alert.alert('エラー', 'カテゴリの作成に失敗しました');
-          }
-        }
-      }
-    );
+  const handleCategoryPress = (categoryId: string) => {
+    navigation.navigate('CategoryDetail', { categoryId });
+  };
+
+  const renderCategoryTile = ({ item }: { item: Category }) => (
+    <TouchableOpacity
+      style={[styles.categoryTile, { borderColor: item.color }]}
+      onPress={() => handleCategoryPress(item.id)}
+    >
+      <View style={[styles.categoryIconContainer, { backgroundColor: item.color + '20' }]}>
+        <Text style={styles.categoryIcon}>{getCategoryIcon(item.icon)}</Text>
+      </View>
+      <Text style={styles.categoryName}>{item.name}</Text>
+      <Text style={styles.categoryCount}>{item.promptCount || 0}個</Text>
+    </TouchableOpacity>
+  );
+
+  const getCategoryIcon = (iconName: string) => {
+    const iconMap: Record<string, string> = {
+      'mail': '✉️',
+      'document-text': '📋',
+      'document': '📄',
+      'lightbulb': '💡',
+      'bar-chart': '📊',
+      'language': '🌐',
+      'search': '🔍',
+      'create': '📑'
+    };
+    return iconMap[iconName] || '📁';
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -74,55 +97,32 @@ const CategoriesScreen: React.FC<Props> = ({ navigation }) => {
         >
           <Text style={styles.backIcon}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>カテゴリ管理</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={handleCreateCategory}
-        >
-          <Text style={styles.addIcon}>+</Text>
-        </TouchableOpacity>
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>カテゴリ一覧</Text>
+          <Text style={styles.headerSubtitle}>作業効率化プロンプト管理</Text>
+        </View>
+        <View style={styles.headerRight} />
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>読み込み中...</Text>
-          </View>
-        ) : categories.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>カテゴリがありません</Text>
-            <Text style={styles.emptySubtitle}>新しいカテゴリを作成してプロンプトを整理しましょう</Text>
-            <Button
-              title="カテゴリを作成"
-              onPress={handleCreateCategory}
-              variant="primary"
-            />
-          </View>
-        ) : (
-          <View style={styles.categoriesContainer}>
-            {categories.map((category) => (
-              <Card
-                key={category.id}
-                style={styles.categoryCard}
-                onPress={() => handleCategoryPress(category)}
-                variant="glass"
-              >
-                <View style={styles.categoryHeader}>
-                  <View style={[styles.categoryIcon, { backgroundColor: category.color }]}>
-                    <Text style={styles.categoryIconText}>{category.icon || '📁'}</Text>
-                  </View>
-                  <View style={styles.categoryInfo}>
-                    <Text style={styles.categoryName}>{category.name}</Text>
-                    <Text style={styles.categoryStats}>
-                      {category.promptCount || 0} プロンプト
-                    </Text>
-                  </View>
-                  <Text style={styles.categoryArrow}>→</Text>
-                </View>
-              </Card>
-            ))}
-          </View>
-        )}
+      <ScrollView
+        style={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+      >
+        {/* Categories Grid */}
+        <View style={styles.categoriesSection}>
+          <Text style={styles.sectionTitle}>カテゴリ ({categories.length})</Text>
+          <FlatList
+            data={categories}
+            renderItem={renderCategoryTile}
+            numColumns={2}
+            horizontal={false}
+            scrollEnabled={false}
+            contentContainerStyle={styles.categoriesGrid}
+            columnWrapperStyle={styles.categoryRow}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -131,128 +131,96 @@ const CategoriesScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: BlueTheme.neutral[100],
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'ios' ? 10 : 20,
-    paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 16,
+    backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: BlueTheme.neutral[200],
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: BlueTheme.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
   backIcon: {
     fontSize: 18,
-    color: '#374151',
+    color: BlueTheme.neutral[700],
     fontWeight: 'bold',
+  },
+  headerCenter: {
+    flex: 1,
+    alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#374151',
-    fontFamily: '-apple-system',
-  },
-  addButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#1DB584',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addIcon: {
-    fontSize: 24,
-    color: '#FFFFFF',
+    ...Typography.h3,
+    color: BlueTheme.neutral[900],
     fontWeight: 'bold',
+  },
+  headerSubtitle: {
+    ...Typography.caption,
+    color: BlueTheme.neutral[600],
+    marginTop: 2,
+  },
+  headerRight: {
+    width: 40,
   },
   scrollView: {
     flex: 1,
   },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 100,
+  categoriesSection: {
+    padding: 24,
   },
-  loadingText: {
-    fontSize: 16,
-    color: '#6B7280',
-  },
-  emptyContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 40,
-    paddingTop: 100,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptySubtitle: {
-    fontSize: 16,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 30,
-    lineHeight: 24,
-  },
-  categoriesContainer: {
-    padding: 20,
-  },
-  categoryCard: {
+  sectionTitle: {
+    fontSize: 18,
+    color: BlueTheme.neutral[900],
     marginBottom: 16,
+    fontWeight: '600',
   },
-  categoryHeader: {
-    flexDirection: 'row',
+  categoriesGrid: {
+    gap: 12,
+  },
+  categoryRow: {
+    justifyContent: 'space-between',
+  },
+  categoryTile: {
+    ...ComponentStyles.categoryTile.dimensions,
+    backgroundColor: ComponentStyles.categoryTile.colors.background,
+    borderWidth: 1,
+    borderColor: ComponentStyles.categoryTile.colors.border,
+    padding: ComponentStyles.categoryTile.layout.padding,
+    marginBottom: 12,
     alignItems: 'center',
+  },
+  categoryIconContainer: {
+    width: ComponentStyles.categoryTile.layout.iconSize,
+    height: ComponentStyles.categoryTile.layout.iconSize,
+    borderRadius: ComponentStyles.categoryTile.layout.iconSize / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: ComponentStyles.categoryTile.layout.spacing,
   },
   categoryIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  categoryIconText: {
     fontSize: 20,
   },
-  categoryInfo: {
-    flex: 1,
-  },
   categoryName: {
-    fontSize: 18,
+    ...Typography.body2,
     fontWeight: '600',
-    color: '#374151',
+    textAlign: 'center',
     marginBottom: 4,
-    fontFamily: '-apple-system',
   },
-  categoryStats: {
-    fontSize: 14,
-    color: '#6B7280',
-  },
-  categoryArrow: {
-    fontSize: 16,
-    color: '#9CA3AF',
-  },
-  categoryDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginTop: 12,
-    lineHeight: 20,
+  categoryCount: {
+    ...Typography.caption,
+    color: BlueTheme.primary[600],
   },
 });
 

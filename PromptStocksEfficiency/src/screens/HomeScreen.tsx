@@ -16,12 +16,11 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import { Prompt } from '../models/Prompt';
-import { Category } from '../models/Category';
 import CategoryManager from '../services/CategoryManager';
 import StorageService from '../storage/AsyncStorageService';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
-import { BlueTheme, Typography, ComponentStyles } from '../styles/theme';
+import { BlueTheme, Typography } from '../styles/theme';
 
 interface Props {
   navigation: any;
@@ -32,7 +31,6 @@ const { width } = Dimensions.get('window');
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [prompts, setPrompts] = useState<Prompt[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [recentPrompts, setRecentPrompts] = useState<Prompt[]>([]);
   const [favoritePrompts, setFavoritePrompts] = useState<Prompt[]>([]);
   const [selectedTab, setSelectedTab] = useState<'recent' | 'favorite' | 'mostUsed'>('recent');
@@ -55,16 +53,14 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       // Force update categories to ensure latest version is loaded
       await CategoryManager.forceUpdateCategories();
       
-      const [allPrompts, allCategories, recentPrompts, favoritePrompts, metrics] = await Promise.all([
+      const [allPrompts, recentPrompts, favoritePrompts, metrics] = await Promise.all([
         StorageService.getAllPrompts(),
-        CategoryManager.getAllCategories(),
         StorageService.getRecentPrompts(10),
         StorageService.getFavoritePrompts(),
         StorageService.getStorageMetrics(),
       ]);
 
       setPrompts(allPrompts);
-      setCategories(allCategories);
       setRecentPrompts(recentPrompts);
       setFavoritePrompts(favoritePrompts);
       setStorageStats({
@@ -130,34 +126,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     }
   };
 
-  const handleCategoryPress = (categoryId: string) => {
-    navigation.navigate('CategoryDetail', { categoryId });
-  };
-
-  const renderCategoryTile = ({ item }: { item: Category }) => (
-    <TouchableOpacity
-      style={[styles.categoryTile, { borderColor: item.color }]}
-      onPress={() => handleCategoryPress(item.id)}
-    >
-      <View style={[styles.categoryIconContainer, { backgroundColor: item.color + '20' }]}>
-        <Text style={styles.categoryIcon}>{getCategoryIcon(item.icon)}</Text>
-      </View>
-      <Text style={styles.categoryName}>{item.name}</Text>
-      <Text style={styles.categoryCount}>{item.promptCount}個</Text>
-    </TouchableOpacity>
-  );
-
-  const getCategoryIcon = (iconName: string) => {
-    const iconMap: Record<string, string> = {
-      'mail': '✉️',
-      'document-text': '📋',
-      'document': '📄',
-      'share': '📱',
-      'bar-chart': '📊',
-      'language': '🌐'
-    };
-    return iconMap[iconName] || '📁';
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -213,19 +181,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
       >
-        {/* Categories Grid */}
-        <View style={styles.categoriesSection}>
-          <Text style={styles.sectionTitle}>カテゴリ</Text>
-          <FlatList
-            data={categories}
-            renderItem={renderCategoryTile}
-            numColumns={2}
-            horizontal={false}
-            scrollEnabled={false}
-            contentContainerStyle={styles.categoriesGrid}
-            columnWrapperStyle={styles.categoryRow}
-          />
-        </View>
 
         {/* Storage Stats */}
         <Card style={styles.statsCard}>
@@ -425,39 +380,6 @@ const styles = StyleSheet.create({
   },
   categoriesGrid: {
     gap: 12,
-  },
-  categoryRow: {
-    justifyContent: 'space-between',
-  },
-  categoryTile: {
-    ...ComponentStyles.categoryTile.dimensions,
-    backgroundColor: ComponentStyles.categoryTile.colors.background,
-    borderWidth: 1,
-    borderColor: ComponentStyles.categoryTile.colors.border,
-    padding: ComponentStyles.categoryTile.layout.padding,
-    marginBottom: 12,
-    alignItems: 'center',
-  },
-  categoryIconContainer: {
-    width: ComponentStyles.categoryTile.layout.iconSize,
-    height: ComponentStyles.categoryTile.layout.iconSize,
-    borderRadius: ComponentStyles.categoryTile.layout.iconSize / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: ComponentStyles.categoryTile.layout.spacing,
-  },
-  categoryIcon: {
-    fontSize: 20,
-  },
-  categoryName: {
-    ...Typography.body2,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  categoryCount: {
-    ...Typography.caption,
-    color: BlueTheme.primary[600],
   },
   usageCount: {
     ...Typography.caption,
