@@ -13,6 +13,24 @@ class CategoryManager {
     }
   }
 
+  async forceUpdateCategories(): Promise<void> {
+    // Clear existing categories and reinitialize with latest DEFAULT_CATEGORIES
+    try {
+      // Clear the categories cache and storage
+      await StorageService.deleteData('categories:all');
+      
+      // Save all default categories
+      for (const category of DEFAULT_CATEGORIES) {
+        await StorageService.saveCategory(category);
+      }
+      
+      console.log('Categories forcefully updated to latest version');
+    } catch (error) {
+      console.error('Failed to force update categories:', error);
+      throw error;
+    }
+  }
+
   async createCategory(categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt' | 'promptCount'>): Promise<Category> {
     const now = new Date();
     const category: Category = {

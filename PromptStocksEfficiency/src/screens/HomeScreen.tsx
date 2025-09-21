@@ -52,6 +52,9 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   const loadData = async () => {
     try {
+      // Force update categories to ensure latest version is loaded
+      await CategoryManager.forceUpdateCategories();
+      
       const [allPrompts, allCategories, recentPrompts, favoritePrompts, metrics] = await Promise.all([
         StorageService.getAllPrompts(),
         CategoryManager.getAllCategories(),
