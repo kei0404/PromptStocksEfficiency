@@ -50,10 +50,10 @@ export const DEFAULT_CATEGORIES: Category[] = [
     updatedAt: new Date()
   },
   {
-    id: 'sns-planning',
-    name: 'SNS企画生成',
+    id: 'planning-creation',
+    name: '企画作成',
     color: '#0D47A1',
-    icon: 'share',
+    icon: 'lightbulb',
     promptCount: 0,
     isDefault: true,
     createdAt: new Date(),
@@ -74,6 +74,26 @@ export const DEFAULT_CATEGORIES: Category[] = [
     name: '翻訳',
     color: '#64B5F6',
     icon: 'language',
+    promptCount: 0,
+    isDefault: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'information-gathering',
+    name: '情報収集',
+    color: '#90CAF9',
+    icon: 'search',
+    promptCount: 0,
+    isDefault: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'document-creation',
+    name: '資料作成',
+    color: '#BBDEFB',
+    icon: 'create',
     promptCount: 0,
     isDefault: true,
     createdAt: new Date(),
