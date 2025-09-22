@@ -120,6 +120,20 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
     navigation.navigate('PromptDetail', { promptId });
   };
 
+  const getCategoryIcon = (iconName: string) => {
+    const iconMap: Record<string, string> = {
+      'mail': '✉️',
+      'document-text': '📋',
+      'document': '📄',
+      'lightbulb': '💡',
+      'bar-chart': '📊',
+      'language': '🌐',
+      'search': '🔍',
+      'create': '📑'
+    };
+    return iconMap[iconName] || '📁';
+  };
+
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('ja-JP', {
       year: 'numeric',
@@ -281,23 +295,6 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
                 </ScrollView>
               </View>
 
-              {/* Preview */}
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>プレビュー</Text>
-                <View style={styles.previewContainer}>
-                  <View style={[styles.categoryPreview, { backgroundColor: `${selectedColor}20` }]}>
-                    <View style={[styles.previewIcon, { backgroundColor: selectedColor }]}>
-                      <Text style={styles.previewIconText}>{editIcon}</Text>
-                    </View>
-                    <View>
-                      <Text style={styles.previewName}>{editName || 'カテゴリ名'}</Text>
-                      {editDescription && (
-                        <Text style={styles.previewDescription}>{editDescription}</Text>
-                      )}
-                    </View>
-                  </View>
-                </View>
-              </View>
             </Card>
 
             {/* Action Buttons */}
@@ -329,7 +326,7 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
             <Card style={styles.infoCard} variant="glass">
               <View style={styles.categoryHeader}>
                 <View style={[styles.categoryIcon, { backgroundColor: category.color }]}>
-                  <Text style={styles.categoryIconText}>{category.icon || '📁'}</Text>
+                  <Text style={styles.categoryIconText}>{getCategoryIcon(category.icon)}</Text>
                 </View>
                 <View style={styles.categoryInfo}>
                   <Text style={styles.categoryName}>{category.name}</Text>
@@ -691,41 +688,6 @@ const styles = StyleSheet.create({
   },
   colorOptionSelected: {
     borderColor: '#374151',
-  },
-  previewContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: 12,
-    padding: 16,
-  },
-  categoryPreview: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-  },
-  previewIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  previewIconText: {
-    fontSize: 20,
-    color: 'white',
-  },
-  previewName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 2,
-    fontFamily: '-apple-system',
-  },
-  previewDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontFamily: '-apple-system',
   },
   actionButtons: {
     flexDirection: 'row',

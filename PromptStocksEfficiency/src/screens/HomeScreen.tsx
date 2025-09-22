@@ -143,20 +143,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
               <Text style={styles.appSubtitle}>作業効率化プロンプト管理</Text>
             </View>
           </View>
-          <View style={styles.headerActions}>
-            <TouchableOpacity 
-              style={styles.headerButton}
-              onPress={() => navigation.navigate('Search')}
-            >
-              <Text style={styles.headerButtonIcon}>🔍</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.headerButton}
-              onPress={() => navigation.navigate('Settings')}
-            >
-              <Text style={styles.headerButtonIcon}>⚙️</Text>
-            </TouchableOpacity>
-          </View>
         </View>
 
         {/* Search Bar */}
