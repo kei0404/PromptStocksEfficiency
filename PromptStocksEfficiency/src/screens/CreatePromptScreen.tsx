@@ -97,6 +97,20 @@ const CreatePromptScreen: React.FC<Props> = ({ navigation, route }) => {
     setShowCategories(false);
   };
 
+  const getCategoryIcon = (iconName: string) => {
+    const iconMap: Record<string, string> = {
+      'mail': '✉️',
+      'document-text': '📋',
+      'document': '📄',
+      'lightbulb': '💡',
+      'bar-chart': '📊',
+      'language': '🌐',
+      'search': '🔍',
+      'create': '📑'
+    };
+    return iconMap[iconName] || '📁';
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
@@ -155,7 +169,7 @@ const CreatePromptScreen: React.FC<Props> = ({ navigation, route }) => {
                 <View style={styles.categoryDisplay}>
                   {selectedCategory && (
                     <View style={[styles.categoryIcon, { backgroundColor: selectedCategory.color }]}>
-                      <Text style={styles.categoryIconText}>{selectedCategory.icon || '📁'}</Text>
+                      <Text style={styles.categoryIconText}>{getCategoryIcon(selectedCategory.icon)}</Text>
                     </View>
                   )}
                   <Text style={styles.categoryName}>
@@ -166,23 +180,36 @@ const CreatePromptScreen: React.FC<Props> = ({ navigation, route }) => {
               </TouchableOpacity>
               
               {showCategories && (
-                <View style={styles.categoryList}>
-                  {categories.map((category) => (
-                    <TouchableOpacity
-                      key={category.id}
-                      style={styles.categoryOption}
-                      onPress={() => handleCategorySelect(category)}
+                <>
+                  <TouchableOpacity
+                    style={styles.overlay}
+                    activeOpacity={1}
+                    onPress={() => setShowCategories(false)}
+                  />
+                  <View style={styles.categoryList}>
+                    <ScrollView 
+                      style={styles.categoryScrollView}
+                      showsVerticalScrollIndicator={true}
+                      nestedScrollEnabled={true}
                     >
-                      <View style={[styles.categoryIcon, { backgroundColor: category.color }]}>
-                        <Text style={styles.categoryIconText}>{category.icon || '📁'}</Text>
-                      </View>
-                      <Text style={styles.categoryName}>{category.name}</Text>
-                      {selectedCategory?.id === category.id && (
-                        <Text style={styles.checkmark}>✓</Text>
-                      )}
-                    </TouchableOpacity>
-                  ))}
-                </View>
+                      {categories.map((category) => (
+                        <TouchableOpacity
+                          key={category.id}
+                          style={styles.categoryOption}
+                          onPress={() => handleCategorySelect(category)}
+                        >
+                          <View style={[styles.categoryIcon, { backgroundColor: category.color }]}>
+                            <Text style={styles.categoryIconText}>{getCategoryIcon(category.icon)}</Text>
+                          </View>
+                          <Text style={styles.categoryName}>{category.name}</Text>
+                          {selectedCategory?.id === category.id && (
+                            <Text style={styles.checkmark}>✓</Text>
+                          )}
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                </>
               )}
             </View>
 
@@ -232,7 +259,7 @@ const styles = StyleSheet.create({
     fontFamily: '-apple-system',
   },
   saveButton: {
-    backgroundColor: '#1DB584',
+    backgroundColor: '#2196F3',
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -260,6 +287,7 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     marginBottom: 16,
+    position: 'relative',
   },
   label: {
     fontSize: 14,
@@ -304,12 +332,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#9CA3AF',
   },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: -20,
+    right: -20,
+    bottom: -1000,
+    zIndex: 999,
+  },
   categoryList: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.98)',
     borderRadius: 16,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: '#E5E7EB',
+    maxHeight: 200,
+    zIndex: 1000,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 8,
+    overflow: 'hidden',
+  },
+  categoryScrollView: {
     maxHeight: 200,
   },
   categoryOption: {
@@ -322,7 +372,7 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     fontSize: 16,
-    color: '#1DB584',
+    color: '#2196F3',
     fontWeight: 'bold',
     marginLeft: 'auto',
   },

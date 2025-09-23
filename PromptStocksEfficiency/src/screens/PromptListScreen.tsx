@@ -107,6 +107,20 @@ const PromptListScreen: React.FC<Props> = ({ navigation, route }) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + sizes[i];
   };
 
+  const getCategoryIcon = (iconName: string) => {
+    const iconMap: Record<string, string> = {
+      'mail': '✉️',
+      'document-text': '📋',
+      'document': '📄',
+      'lightbulb': '💡',
+      'bar-chart': '📊',
+      'language': '🌐',
+      'search': '🔍',
+      'create': '📑'
+    };
+    return iconMap[iconName] || '📁';
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -121,17 +135,9 @@ const PromptListScreen: React.FC<Props> = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="chevron-back" size={20} color="#374151" />
-          </TouchableOpacity>
-          <View style={styles.headerTitle}>
-            <Text style={styles.title}>プロンプト一覧</Text>
-            <Text style={styles.subtitle}>編集するプロンプトを選択</Text>
-          </View>
+        <View style={styles.headerCenter}>
+          <Text style={styles.title}>プロンプト一覧</Text>
+          <Text style={styles.subtitle}>編集するプロンプトを選択</Text>
         </View>
       </View>
 
@@ -183,7 +189,7 @@ const PromptListScreen: React.FC<Props> = ({ navigation, route }) => {
               ]}
               onPress={() => setSelectedCategory(category.id)}
             >
-              <Text style={styles.categoryFilterEmoji}>{category.icon || '📁'}</Text>
+              <Text style={styles.categoryFilterEmoji}>{getCategoryIcon(category.icon)}</Text>
               <Text style={[
                 styles.categoryFilterText,
                 selectedCategory === category.id && styles.categoryFilterTextActive
@@ -293,15 +299,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingHorizontal: 24,
     paddingVertical: 16,
     backgroundColor: 'white',
   },
-  headerLeft: {
-    flexDirection: 'row',
+  headerCenter: {
     alignItems: 'center',
-    flex: 1,
   },
   backButton: {
     width: 40,
@@ -324,11 +328,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#374151',
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
     color: '#6B7280',
     marginTop: 2,
+    textAlign: 'center',
   },
   searchContainer: {
     paddingHorizontal: 24,
@@ -380,8 +386,8 @@ const styles = StyleSheet.create({
     borderColor: '#E5E7EB',
   },
   categoryFilterButtonActive: {
-    backgroundColor: '#1DB584',
-    borderColor: '#1DB584',
+    backgroundColor: '#2196F3',
+    borderColor: '#2196F3',
   },
   categoryFilterEmoji: {
     fontSize: 14,

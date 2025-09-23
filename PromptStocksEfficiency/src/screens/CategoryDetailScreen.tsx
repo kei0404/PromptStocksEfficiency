@@ -34,11 +34,11 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
   const [editName, setEditName] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editIcon, setEditIcon] = useState('');
-  const [selectedColor, setSelectedColor] = useState('#1DB584');
+  const [selectedColor, setSelectedColor] = useState('#2196F3');
 
   const availableColors = [
-    '#1DB584', // Teal (default)
-    '#3B82F6', // Blue
+    '#2196F3', // Blue (default)
+    '#3B82F6', // Blue variant
     '#8B5CF6', // Purple
     '#EC4899', // Pink
     '#F59E0B', // Orange
@@ -70,7 +70,7 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
         setEditName(categoryData.name);
         setEditDescription(categoryData.description || '');
         setEditIcon(categoryData.icon || '📁');
-        setSelectedColor(categoryData.color || '#1DB584');
+        setSelectedColor(categoryData.color || '#2196F3');
         setPrompts(categoryPrompts);
       } else {
         Alert.alert('エラー', 'カテゴリが見つかりません', [
@@ -174,21 +174,13 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="chevron-back" size={20} color="#374151" />
-          </TouchableOpacity>
-          <View style={styles.headerTitle}>
-            <Text style={styles.title}>
-              {editMode ? 'カテゴリ編集' : 'カテゴリ詳細'}
-            </Text>
-            <Text style={styles.subtitle}>
-              {editMode ? '設定を変更' : `${prompts.length} プロンプト`}
-            </Text>
-          </View>
+        <View style={styles.headerCenter}>
+          <Text style={styles.title}>
+            {editMode ? 'カテゴリ編集' : 'カテゴリ情報確認'}
+          </Text>
+          <Text style={styles.subtitle}>
+            {editMode ? '設定を変更' : `${prompts.length} プロンプト`}
+          </Text>
         </View>
         <TouchableOpacity 
           style={styles.editButton} 
@@ -198,7 +190,7 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
               setEditName(category.name);
               setEditDescription(category.description || '');
               setEditIcon(category.icon || '📁');
-              setSelectedColor(category.color || '#1DB584');
+              setSelectedColor(category.color || '#2196F3');
               setEditMode(false);
             } else {
               setEditMode(true);
@@ -305,7 +297,7 @@ const CategoryDetailScreen: React.FC<Props> = ({ navigation, route }) => {
                   setEditName(category.name);
                   setEditDescription(category.description || '');
                   setEditIcon(category.icon || '📁');
-                  setSelectedColor(category.color || '#1DB584');
+                  setSelectedColor(category.color || '#2196F3');
                   setEditMode(false);
                 }}
                 variant="secondary"
@@ -421,10 +413,9 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: 'white',
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  headerCenter: {
     flex: 1,
+    alignItems: 'center',
   },
   backButton: {
     width: 40,
@@ -447,18 +438,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#374151',
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
     color: '#6B7280',
     marginTop: 2,
+    textAlign: 'center',
   },
   editButton: {
-    backgroundColor: '#1DB584',
+    backgroundColor: '#2196F3',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 12,
-    shadowColor: '#1DB584',
+    shadowColor: '#2196F3',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -554,7 +547,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1DB584',
+    color: '#2196F3',
     fontFamily: '-apple-system',
   },
   statLabel: {
@@ -668,8 +661,8 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   iconOptionSelected: {
-    borderColor: '#1DB584',
-    backgroundColor: 'rgba(29, 181, 132, 0.1)',
+    borderColor: '#2196F3',
+    backgroundColor: 'rgba(33, 150, 243, 0.1)',
   },
   iconText: {
     fontSize: 20,

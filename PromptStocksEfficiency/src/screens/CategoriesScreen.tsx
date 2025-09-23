@@ -91,12 +91,6 @@ const CategoriesScreen: React.FC<Props> = ({ navigation }) => {
       
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backIcon}>←</Text>
-        </TouchableOpacity>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>カテゴリ一覧</Text>
           <Text style={styles.headerSubtitle}>作業効率化プロンプト管理</Text>
