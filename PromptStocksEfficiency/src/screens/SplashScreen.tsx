@@ -6,6 +6,7 @@ import {
   Animated,
   Dimensions,
   StatusBar,
+  Image,
 } from 'react-native';
 import { BlueTheme } from '../styles/theme';
 interface Props {
@@ -21,6 +22,7 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     StatusBar.setBarStyle('light-content');
+    console.log('SplashScreen loaded - checking icon path');
     
     // Start animations
     Animated.sequence([
@@ -82,7 +84,14 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
         >
           {/* Logo Icon */}
           <View style={styles.logoIcon}>
-            <Text style={styles.logoEmoji}>💡</Text>
+            <Image 
+              source={require('../../assets/icon_image.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+              onError={(error) => {
+                console.error('Failed to load icon image:', error);
+              }}
+            />
           </View>
           
           {/* App Name */}
@@ -94,7 +103,7 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
               },
             ]}
           >
-            PromptStocksEfficiency
+            PromptStocks{'\n'}Efficiency
           </Animated.Text>
           
           {/* Tagline */}
@@ -227,6 +236,10 @@ const styles = StyleSheet.create({
   logoEmoji: {
     fontSize: 48,
   },
+  logoImage: {
+    width: 80,
+    height: 80,
+  },
   appName: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -235,6 +248,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
     letterSpacing: -0.5,
+    lineHeight: 38,
   },
   tagline: {
     fontSize: 16,

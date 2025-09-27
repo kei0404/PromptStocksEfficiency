@@ -5,9 +5,15 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon_image.png",
     "splash": {
-      "backgroundColor": "#1976D2"
+      "backgroundColor": "#1976D2",
+      "image": "./assets/splash_image.png",
+      "resizeMode": "contain"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "platforms": ["ios", "android"]
   }
 }
